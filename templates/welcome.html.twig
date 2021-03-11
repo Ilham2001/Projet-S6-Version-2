@@ -1,4 +1,5 @@
-{% extends 'base.html.twig' %}
-{% block body %}
-    Welcome !
-{% endblock %}
+{% if is_granted('ROLE_GERANT') %}
+    {% include "/admin/index.html.twig" %}
+{% elseif is_granted('ROLE_USER') %}
+    {% include "/user/index.html.twig" %}
+{% endif %}
