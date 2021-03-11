@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,8 @@ class AdminController extends AbstractController
 
     public function users_list()
     {
-        return $this->render('/admin/users.html.twig');
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        return $this->render('/admin/users.html.twig', array('users' => $users));
     }
 
     public function ajouter_user(Request $request)

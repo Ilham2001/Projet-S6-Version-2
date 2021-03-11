@@ -6,16 +6,34 @@
         <a href="{{ path('admin_ajouter_user') }}" id="ajouter_utilisateur">+ Ajouter un enseignant</a>
 
         <table class="tableau_de_resultats tableau_utilisateurs">
-            <tr>
-                <th>Nom</th>
+            <thead>
+                <th>ID</th>
+                <th>Login</th>
+                <th>Rôles</th>
                 <th>Modification</th>
-                <th>Suppression</th>
-            </tr>
-            <tr>
-                <th>test</th>
-                <th><a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_user') }}">Modifier</a></th>
-                <th><button id="button_supprimer" class="button_admin" onclick="">Supprimer</button></th>
-            </tr>
+                <th>Suppresion</th>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <th>{{ user.id }}</th>
+                    <th>{{ user.login }}</th>
+                    <th>
+                        {% for role in user.roles %}
+                            {% if role == "ROLE_USER" %}
+                                Utilisateur
+                            {% elseif role == "ROLE_ADMIN" %}
+                                Administrateur
+                            {% endif %}
+                        {% endfor %}
+                    </th>
+                    <th><a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_user') }}">Modifier</a></th>
+                    <th><button id="button_supprimer" class="button_admin" onclick="">Supprimer</button></th>
+                </tr>
+                {% else %}
+                    <p>Aucun utilisateur inscrit</p>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 {% endblock %}

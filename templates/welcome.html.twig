@@ -1,4 +1,4 @@
-{% if is_granted('ROLE_GERANT') %}
+{% if is_granted('ROLE_ADMIN') %}
     {% include "/admin/index.html.twig" %}
 {% elseif is_granted('ROLE_USER') %}
     {% include "/user/index.html.twig" %}
