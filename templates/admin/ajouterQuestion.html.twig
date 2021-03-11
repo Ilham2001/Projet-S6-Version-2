@@ -1,0 +1,24 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}
+    <h2 class="titre">Nouvelle Question</h2>
+    <div class="box">
+        <div class="box_ajout">
+            {{ form_start(ajouter_question_form) }}
+            <div class="">
+                {{ form_errors(ajouter_question_form) }}
+            </div>
+            <div class="zone_input">
+                    <div class="input">{{ form_row(ajouter_question_form.question) }}</div>
+                    <div class="input">{{ form_row(ajouter_question_form.type) }}</div>
+                    <div class="input">{{ form_row(ajouter_question_form.propositions) }}</div>
+                    <div class="">{{ form_row(ajouter_question_form.autre_proposition) }}</div>
+                    <div class="">{{ form_row(ajouter_question_form.thematique) }}</div>
+                    <div class="">{{ form_row(ajouter_question_form.matiere) }}</div>
+                    <div class="">{{ form_row(ajouter_question_form.autre_question) }}</div><br>
+                    <div class="ajouter_question_btn">{{ form_row(ajouter_question_form.ajouter) }}</div>
+            </div>
+            {{ form_end(ajouter_question_form) }}
+        </div>
+    </div>
+{% endblock %}

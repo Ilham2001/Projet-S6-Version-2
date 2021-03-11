@@ -1,0 +1,44 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}        
+    <table class="elements">
+        <tr>
+            <td>
+                <a class="contenu" href="">
+                    
+                    
+                </a>
+            </td>
+            <td>
+                <a class="contenu" href="{{ path('admin_users') }}">
+                    <i class="fas fa-users"></i></i><br>
+                    <h2>Gestions des utilisateurs</h2>
+                </a>
+            </td>
+                <td>
+                    <a class="contenu" href="">
+                       
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a class="contenu" href="">
+                        <i class="fas fa-question-circle"></i></i><br>
+                        <h2>Gestion des questions</h2>
+                    </a>
+                </td>
+                <td>
+                    <a class="contenu" href="">
+                     
+                    </a>
+                </td>
+                <td>
+                    <a class="contenu" href="">
+                        <i class="fas fa-copy"></i><br>
+                        <h2>Gestion des évalutations</h2>
+                    </a>
+                </td>
+            </tr>
+    </table>
+{% endblock %}

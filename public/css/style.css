@@ -1,0 +1,216 @@
+@import "https://use.fontawesome.com/releases/v5.5.0/css/all.css";
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #ececec;
+}
+*{
+    font-family: 'Calibri', cursive;
+}
+li, a, button {
+    font-weight: 500;
+    font-size: 16px;
+    color: #EDF0F1;
+    text-decoration: none;
+}
+header{
+    display: flex;
+    height: 0px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 10%;
+    background-color: #ec7357;
+}
+#titre_page{
+    cursor: pointer;
+    color: #353535;
+    font-weight: 900;
+    font-size: 25px;
+}
+.nav_liens {
+    list-style: none;
+}
+.nav_liens  li{
+    display: inline-block;
+    padding: 0 20px;
+}
+.nav_liens  li a:hover{
+    color: #0088a9;
+}
+.elements{
+    height: 92vh;
+    width: 100vw;
+}
+.elements tr td {
+    margin: 0;
+    text-align: center;
+    width: 33.33%;
+    height:  50%;
+
+}
+.contenu{
+    color: #039fbb;
+}
+.fas{
+    font-size: 5em;
+    transition: 500ms;
+    padding: 5%;
+}
+.fas:hover {
+    font-size: 8em;
+    color: black ; 
+}
+#ajouter_evaluation, #ajouter_utilisateur, #ajouter_question {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #ec7357;
+    display: block;
+    text-align: center;
+    width: 200px;
+    position: relative;
+    float: right;
+    margin: 15px;
+    transition: 300ms;
+}
+#ajouter_categorie {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #ec7357;
+    display: block;
+    text-align: center;
+    width: 250px;
+    position: relative;
+    float: left;
+    margin: 15px;
+    transition: 300ms;
+}
+#ajouter_question_btn {
+    background-color: #ec7357;
+    float: right;
+}
+
+#ajouter_evaluation:hover, #ajouter_utilisateur:hover, #ajouter_categorie:hover,  #ajouter_question:hover{
+    background-color: #f59c88;
+}
+.titre {
+    text-align: center;
+}
+button{
+    padding: 9px 25px;
+    background-color: rgb(0, 136, 169);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.button_admin{
+    padding: 10px 20px;
+    border-radius: 20px;
+ }
+#button_supprimer{
+    background: #db0d0d;
+
+}
+#button_modifier{
+    background: #0088a9;
+
+}
+#button_generer{
+    background: #058d05;
+
+}
+.button_ajouter {
+    margin-top: 9px;
+    background-color: #ec7357;
+    width: 100%;
+    border-radius: 8px;
+}
+.tableau_de_resultats{
+    margin-top:50px ;
+    width: 100vw;
+    border-collapse: collapse;
+}
+.tableau_de_resultats tr th{
+    text-align: left;
+    font-size: 18px;
+}
+.tableau_de_resultats tr{
+    height: 70px;
+    border: 1px solid rgb(148, 148, 148);
+}
+th, td{
+    padding: 0%;
+    margin: 0%;
+    width: 20%;
+}
+.tableau_de_resultats tr td, .tableau_de_resultats tr th {
+    padding-left:30px ;
+}
+.tableau_utilisateurs tr td:last-of-type{
+    padding-right: 50px;
+}
+.tableau_de_resultats tr:nth-child(even) {
+    background-color: #cccccc;
+}
+.zone_filtre {
+    margin-left: auto;
+    margin-right: auto;
+}
+.zone_filtre li {
+    width: 100px;
+    padding: 10px;
+    display: inline-block;
+}
+input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 15px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.select {
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+}
+.box {
+    background-color: none;
+    width: 900px;
+    height: 400px;
+    border: 3px solid #f59c88;
+    padding: 40px;
+    margin: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+}
+.zone_input {
+    width: 500px;
+    height: 50px;
+    background-color: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+.icon {
+    color: #039fbb;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.clock{
+    text-align:center;
+    width:auto;
+    height:auto;
+}
+#icon_ajout {
+    font-size: 7em;
+    color: #0088a9;
+}
+#icon_ajout:hover {
+    font-size: 7em;
+}

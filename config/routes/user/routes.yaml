@@ -1,0 +1,7 @@
+user_index :
+    path: /index
+    controller: App\Controller\UserController::index
+
+user_questions :
+    path: /questions
+    controller: App\Controller\UserController::questions_list

@@ -1,0 +1,23 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2 class="titre">Historique des évaluations</h2>
+        <a href="{{ path('admin_generer_evaluation') }}" id="ajouter_evaluation">+ Nouvelle évaluation</a>
+
+        <table class="tableau_de_resultats tableau_utilisateurs">
+            <tr>
+                <th>Nom</th>
+                <th>Date de création</th>
+                <th>Consultation</th>
+                <th>Génération</th>
+            </tr>
+            <tr>
+                <th>evaluation num1</th>
+                <th>date</th>
+                <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
+                <th><button id="button_generer" class="button_admin" onclick="">Générer</button></th>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

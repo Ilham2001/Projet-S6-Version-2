@@ -1,0 +1,42 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2 class="titre">Questions</h2>
+        
+        <div>
+            {{ form_start(filtre_question_form) }}
+            <div class="">
+                {{ form_errors(filtre_question_form) }}
+            </div>
+            <div class="zone_filtre">
+                <ul>
+                    <li><div class="input">{{ form_row(filtre_question_form.question) }}</div></li>
+                    <li><div class="input">{{ form_row(filtre_question_form.type) }}</div></li>
+                    <li><div class="input">{{ form_row(filtre_question_form.thematique) }}</div></li>
+                    <li><div class="input">{{ form_row(filtre_question_form.matiere) }}</div>
+                </ul>
+            </div>
+            {{ form_end(filtre_question_form) }}
+        </div>
+
+        <a href="{{ path('admin_ajouter_questions') }}" id="ajouter_question">+ Nouvelle question</a>
+        <a href="{{ path('admin_ajouter_categorie') }}" id="ajouter_categorie">+ Nouvelle thématique/matière</a>
+
+        <table class="tableau_de_resultats tableau_utilisateurs">
+            <tr>
+                <th>Question</th>
+                <th>Propositions</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <th>question1</th>
+                <th>propo</th>
+                <th>
+                    <a id="button_modifier" class="button_admin" href="">Consulter</a>
+                    <button id="button_generer" class="button_admin" onclick="">Générer</button>
+                </th>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

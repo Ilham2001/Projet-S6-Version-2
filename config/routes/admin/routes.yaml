@@ -1,0 +1,35 @@
+admin_index :
+    path: /index
+    controller: App\Controller\AdminController::index
+
+admin_users :
+    path: /users
+    controller: App\Controller\AdminController::users_list
+
+admin_evaluations :
+    path: /evaluations
+    controller: App\Controller\AdminController::evaluations_list
+
+admin_generer_evaluation :
+    path: /generer_evaluation
+    controller: App\Controller\AdminController::generer_evaluation
+
+admin_questions :
+    path: /questions
+    controller: App\Controller\AdminController::questions_list
+
+admin_ajouter_questions :
+    path: /ajouter_question
+    controller: App\Controller\AdminController::ajouter_question
+
+admin_ajouter_categorie :
+    path: /ajouter_categorie
+    controller: App\Controller\AdminController::ajouter_categorie
+
+admin_ajouter_user :
+    path: /ajouter_user
+    controller: App\Controller\AdminController::ajouter_user
+
+admin_modifier_user :
+    path: /modifier_user
+    controller: App\Controller\AdminController::modifier_user

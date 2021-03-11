@@ -1,0 +1,20 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}
+    <h2 class="titre">Nouvelle thématique ou matière</h2>
+    <div class="box">
+        <div class="box_ajout">
+            {{ form_start(ajouter_categorie_form) }}
+            <div class="">
+                {{ form_errors(ajouter_categorie_form) }}
+            </div>
+            <div class="">
+                <div class="input">{{ form_row(ajouter_categorie_form.categorie) }}</div>
+                Nom de la catégorie : <div class="input">{{ form_row(ajouter_categorie_form.nom_categorie) }}</div>
+                <div class="input">{{ form_row(ajouter_categorie_form.autre_categorie) }}</div>
+                <div class="input">{{ form_row(ajouter_categorie_form.ajouter) }}</div>
+            </div>
+            {{ form_end(ajouter_categorie_form) }}
+        </div>
+    </div>
+{% endblock %}

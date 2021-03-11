@@ -1,0 +1,35 @@
+{% extends 'layouts/userLayout.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2 class="titre">Questions</h2>
+        
+        <div>
+            {{ form_start(filtre_question_form) }}
+            <div class="">
+                {{ form_errors(filtre_question_form) }}
+            </div>
+            <div class="zone_filtre">
+                <div class="input">{{ form_row(filtre_question_form.question) }}</div>
+                <div class="input">{{ form_row(filtre_question_form.type) }}</div>
+                <div class="input">{{ form_row(filtre_question_form.thematique) }}</div>
+                <div class="input">{{ form_row(filtre_question_form.matiere) }}</div>
+            </div>
+            {{ form_end(filtre_question_form) }}
+        </div>
+
+        <a href="" id="ajouter_evaluation">+ Nouvelle évaluation</a>
+        <a href="" id="ajouter_categorie">+ Nouvelle thématique/matière</a>
+
+        <table class="tableau_de_resultats tableau_utilisateurs">
+            <tr>
+                <th>Question</th>
+                <th>Propositions</th>
+            </tr>
+            <tr>
+                <th>question1</th>
+                <th>propo</th>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
