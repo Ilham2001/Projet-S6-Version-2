@@ -2,8 +2,8 @@
 
 {% block body %}
     <div>
-        <h2 class="titre">Enseignants</h2>
-        <a href="{{ path('admin_ajouter_user') }}" id="ajouter_utilisateur">+ Ajouter un enseignant</a>
+        <h2 class="titre">Utilisateurs</h2>
+        <a href="{{ path('admin_ajouter_user') }}" id="ajouter_utilisateur">+ Ajouter un utilisateur</a>
 
         <table class="tableau_de_resultats tableau_utilisateurs">
             <thead>
@@ -27,7 +27,7 @@
                             {% endif %}
                         {% endfor %}
                     </th>
-                    <th><a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_user') }}">Modifier</a></th>
+                    <th><a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_user', {'id' : user.id }) }}">Modifier</a></th>
                     <th><button id="button_supprimer" class="button_admin" onclick="">Supprimer</button></th>
                 </tr>
                 {% else %}

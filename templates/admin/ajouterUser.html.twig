@@ -11,8 +11,9 @@
             <div class="zone_input">
                 <center><i id="icon_ajout" class="fas fa-user"></i></center>
                 <div class="input">{{ form_row(ajouter_user_form.login) }}</div>
+                <div class="input">{{ form_row(ajouter_user_form.roles) }}</div>
                 <div class="input">{{ form_row(ajouter_user_form.password) }}</div>
-                <a href="" class="button_ajouter">{{ form_row(ajouter_user_form.ajouter) }}</a>
+                <a href="{{ path('admin_ajouter_user') }}" class="button_ajouter">{{ form_row(ajouter_user_form.ajouter) }}</a>
             </div>
             {{ form_end(ajouter_user_form) }}
         </div>

@@ -31,5 +31,13 @@ admin_ajouter_user :
     controller: App\Controller\AdminController::ajouter_user
 
 admin_modifier_user :
-    path: /modifier_user
+    path: /modifier_user/{id}
     controller: App\Controller\AdminController::modifier_user
+
+admin_modifier_user_suite :
+    path: /modifier_user_suite/{id}
+    controller: App\Controller\AdminController::modifier_user_suite
+
+admin_supprimer_user :
+    path: /supprimer_user/{id}
+    controller: App\Controller\AdminController::supprimser_user

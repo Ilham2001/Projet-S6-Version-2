@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminController extends AbstractController
 {
@@ -28,34 +30,79 @@ class AdminController extends AbstractController
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         return $this->render('/admin/users.html.twig', array('users' => $users));
     }
-
-    public function ajouter_user(Request $request)
-    {
-        $ajouter_user_form = $this->createFormBuilder(null)
-            ->add('login',TextType::class,array('label' => false, 'attr' => array('placeholder' => 'Nom d\'utilisateur')))
-            ->add('password',PasswordType::class , array('label' => false, 'attr' => array('placeholder' => 'Mot de passe')))
-            ->add('ajouter',SubmitType::class,array('label' => 'Ajouter'))
-            ->getForm();
+    /* Ajouter un nouvel utilisateur */
+    public function ajouter_user($id,Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+        $user = new User;
+        //Formulaire
+        $ajouter_user_form = $this->createForm(UserFormType::class, $user);
         $ajouter_user_form->handleRequest($request);
+
         if ($ajouter_user_form->isSubmitted() && $ajouter_user_form->isValid()) {
-            dd("add user");
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $ajouter_user_form->get('password')->getData()
+                )
+            );
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            //
+            return $this->redirectToRoute('admin_users');
         }
         return $this->render('/admin/ajouterUser.html.twig',
            array('ajouter_user_form' => $ajouter_user_form->createView()));
     }
-    public function modifier_user(Request $request) {
-        $modifier_user_form = $this->createFormBuilder(null)
-            ->add('login',TextType::class,array('label' => false, 'attr' => array('placeholder' => 'Nom d\'utilisateur')))
-            ->add('password',PasswordType::class , array('label' => false, 'attr' => array('placeholder' => 'Mot de passe')))
-            ->add('confirm_password',PasswordType::class , array('label' => false, 'attr' => array('placeholder' => 'Confirmer votre mot de passe')))
-            ->add('enregistrer',SubmitType::class,array('label' => 'Enregistrer'))
-            ->getForm();
-        $modifier_user_form->handleRequest($request);
-        if ($modifier_user_form->isSubmitted() && $modifier_user_form->isValid()) {
-            dd("modifier user");
+    /* Modifier un  utilisateur */
+    public function modifier_user($id) {
+        $user = new user;
+        
+        $user=$this->getDoctrine()->getRepository(User::class)->find($id);
+        if(!$user) {
+            throw $this->createNotFoundException('Utilisateur [id='.$id.'] inexistant.');
         }
+        $modifier_user_form=$this->createForm(UserFormType::class,$user,
+            ['action' => $this->generateUrl('admin_modifier_user_suite',
+                array('id' => $user->getId()))]);
+
+
         return $this->render('/admin/modifierUser.html.twig',
            array('modifier_user_form' => $modifier_user_form->createView()));
+    }
+    /* Suite de la modification d'un utilisateur */
+    public function modifier_user_suite(Request $request, $id,UserPasswordEncoderInterface $passwordEncoder ) {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        if(!$user) {
+            throw $this->createNotFoundException('Utilisateur [id='.$id.'] inexistant.');
+        }
+        $modifier_user_form=$this->createForm(UserFormType::class,$user,
+            ['action' => $this->generateUrl('admin_modifier_user_suite',
+                array('id' => $user->getId()))]);
+        $modifier_user_form->handleRequest($request);
+        if($modifier_user_form->isSubmitted() && $modifier_user_form->isValid()){
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $modifier_user_form->get('password')->getData()
+                )
+            );
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('admin_users');
+        }
+    }
+    /* Supprimer un utilisateur */
+    public function supprimer_user($id) {
+        $user = new User;
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrine()->getRepository(User::class);
+        $film = $repo->find($id);
+        $em->persist($user);
+        $em->remove($user); 
+        $em->flush();
+        //add flash here
+        return $this->redirectToRoute('admin_users');
     }
 
     public function evaluations_list()
