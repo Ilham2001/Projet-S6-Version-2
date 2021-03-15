@@ -154,12 +154,12 @@ th, td{
     background-color: #cccccc;
 }
 .zone_filtre {
-    width: 700px;
+    width: 85%;
     margin-left: auto;
     margin-right: auto;
 }
 .zone_filtre li {
-    width: 300px;
+    width: 400px;
     padding: 5px;
     display: inline-block;
 }

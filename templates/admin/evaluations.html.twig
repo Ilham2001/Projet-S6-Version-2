@@ -6,18 +6,45 @@
         <a href="{{ path('admin_generer_evaluation') }}" id="ajouter_evaluation">+ Nouvelle évaluation</a>
 
         <table class="tableau_de_resultats tableau_utilisateurs">
-            <tr>
-                <th>Nom</th>
-                <th>Date de création</th>
-                <th>Consultation</th>
-                <th>Génération</th>
-            </tr>
-            <tr>
-                <th>evaluation num1</th>
-                <th>date</th>
-                <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
-                <th><button id="button_generer" class="button_admin" onclick="">Générer</button></th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Date de création</th>
+                    <th>Utilisateur</th>
+                    <th>Consultation</th>
+                    <th>Génération</th>
+                </tr>
+            </head>
+            <tbody>
+            {% if is_granted('ROLE_ADMIN') %}
+                {% for evaluation in evaluations %}
+                <tr>
+                    <th> {{ evaluation.nomEvaluation }} </th>
+                    <th> {{ evaluation.dateEvaluation ? evaluation.dateEvaluation|date('m/d/Y') }} </th>
+                    <th> {{ evaluation.user.login }} </th>
+                    <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
+                    <th><button id="button_generer" class="button_admin" onclick="">Générer</button></th>
+                </tr>
+                {% else %}
+                 <tr>
+                    <th colspan="4"><center>Aucun résultat</center></th>
+                </tr>
+                {% endfor %}
+            {% elseif is_granted('ROLE_USER') %}
+                {% for evaluation in userEvaluations %}
+                <tr>
+                    <th> {{ evaluation.nomEvaluation }} </th>
+                    <th> {{ evaluation.dateEvaluation ? evaluation.dateEvaluation|date('m/d/Y') }} </th>
+                    <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
+                    <th><button id="button_generer" class="button_admin" onclick="">Générer</button></th>
+                </tr>
+                {% else %}
+                 <tr>
+                    <th colspan="4"><center>Aucun résultat</center></th>
+                </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
         </table>
     </div>
 {% endblock %}

@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Evaluation;
+use App\Entity\Question;
+use App\Entity\Thematique;
+use App\Entity\TypeQuestion;
 use App\Form\UserFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminController extends AbstractController
 {
@@ -29,15 +34,24 @@ class AdminController extends AbstractController
     {
         /* Filtre par login d'utilisateur */
         $login_form = $this->createFormBuilder(null)
-            ->add('login',TextType::class, array('attr' => ['placeholder' => 'Nom d\'utilisateur']))
-            ->add('roles',CH)
+            ->add('login',TextType::class, array('attr' => [
+                'required' => false,
+                'placeholder' => 'Nom d\'utilisateur']))
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Administrateur' => 'ROLE_ADMIN'
+                ],
+                'label' => 'Rôles' 
+            ])
             ->add('rechercher',SubmitType::class,array('label' => 'Rechercher'))
             ->getForm();
         $login_form->handleRequest($request);
         if($login_form->isSubmitted() && $login_form->isValid()) {
             
             $login = $login_form['login']->getData();
-            $users = $this->getDoctrine()->getRepository(User::class)->findByLogin($login);
+            $role = $login_form['roles']->getData();
+            $users = $this->getDoctrine()->getRepository(User::class)->findByLogin($login,$role);
             
             return $this->render('/admin/users.html.twig', array(
                 'login_form' => $login_form->createView(),
@@ -123,12 +137,20 @@ class AdminController extends AbstractController
         //add flash here
         return $this->redirectToRoute('admin_users');
     }
-
-    public function evaluations_list()
+    /* Liste des evaluations */
+    public function evaluations_list(UserInterface $user)
     {
-        return $this->render('/admin/evaluations.html.twig');
-    }
+        $user = $this->getUser();
+        /* Find evaluations by user */
+        $user_evaluations = $this->getDoctrine()->getRepository(Evaluation::class)->findByUser($user);
 
+        $evaluations = $this->getDoctrine()->getRepository(Evaluation::class)->findAll();
+        return $this->render('/admin/evaluations.html.twig', array (
+            'userEvaluations' => $user_evaluations,
+            'evaluations' => $evaluations
+        ));
+    }
+    /* Générer une évaluation */
     public function generer_evaluation(Request $request) {
         $generer_evaluation_form = $this->createFormBuilder(null)
             ->add('evaluation_nom',TextType::class,array('label' => false))
@@ -174,6 +196,23 @@ class AdminController extends AbstractController
         if($ajouter_question_form->isSubmitted() && $ajouter_question_form->isValid()) {
             dd('ajouter form');
         }
+
+        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(1);
+        $thema = $this->getDoctrine()->getRepository(Thematique::class)->find(2);
+        $question = new Question;
+        $propos = ["propo1", "propo2", "propo3"];
+        $reponses = ["propo1","propo3"];
+        $question->setContenuQuestion("Question 1");
+        $question->setPropositionsQuestion($propos);
+        $question->setReponsesQuestion($reponses);
+        $question->setTypeQuestion($type);
+        $question->setThematiqueQuestion($thema);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($question);
+        $entityManager->flush();
+        dd('done');
+
         return $this->render('/admin/ajouterQuestion.html.twig',
            array('ajouter_question_form' => $ajouter_question_form->createView()));
     }
@@ -193,6 +232,7 @@ class AdminController extends AbstractController
         if($ajouter_categorie_form->isSubmitted() && $ajouter_categorie_form->isValid()) {
             dd('ajouter form');
         }
+
         return $this->render('/admin/ajouterCategorie.html.twig',
            array('ajouter_categorie_form' => $ajouter_categorie_form->createView()));
     }

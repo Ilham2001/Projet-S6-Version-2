@@ -27,17 +27,22 @@ class Evaluation
     /**
      * @ORM\Column(type="string", length=30)
      */
-    private $nom_evaluation;
+    private $nomEvaluation;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date_evaluation;
+    private $dateEvaluation;
 
     /**
      * @ORM\ManyToMany(targetEntity=Question::class, mappedBy="evaluation_question")
      */
     private $questions;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="evaluations")
+     */
+    private $user;
 
     public function __construct()
     {
@@ -63,24 +68,24 @@ class Evaluation
 
     public function getNomEvaluation(): ?string
     {
-        return $this->nom_evaluation;
+        return $this->nomEvaluation;
     }
 
-    public function setNomEvaluation(string $nom_evaluation): self
+    public function setNomEvaluation(string $nomEvaluation): self
     {
-        $this->nom_evaluation = $nom_evaluation;
+        $this->nomEvaluation = $nomEvaluation;
 
         return $this;
     }
 
     public function getDateEvaluation(): ?\DateTimeInterface
     {
-        return $this->date_evaluation;
+        return $this->dateEvaluation;
     }
 
-    public function setDateEvaluation(\DateTimeInterface $date_evaluation): self
+    public function setDateEvaluation(\DateTimeInterface $datEvaluation): self
     {
-        $this->date_evaluation = $date_evaluation;
+        $this->dateEvaluation = $dateEvaluation;
 
         return $this;
     }
@@ -108,6 +113,18 @@ class Evaluation
         if ($this->questions->removeElement($question)) {
             $question->removeEvaluationQuestion($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
