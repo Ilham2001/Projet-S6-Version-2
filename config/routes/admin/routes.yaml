@@ -40,4 +40,4 @@ admin_modifier_user_suite :
 
 admin_supprimer_user :
     path: /supprimer_user/{id}
-    controller: App\Controller\AdminController::supprimser_user
+    controller: App\Controller\AdminController::supprimer_user

@@ -25,13 +25,32 @@ class AdminController extends AbstractController
         return $this->render('/admin/index.html.twig');
     }
 
-    public function users_list()
+    public function users_list(Request $request)
     {
+        /* Filtre par login d'utilisateur */
+        $login_form = $this->createFormBuilder(null)
+            ->add('login',TextType::class, array('attr' => ['placeholder' => 'Nom d\'utilisateur']))
+            ->add('roles',CH)
+            ->add('rechercher',SubmitType::class,array('label' => 'Rechercher'))
+            ->getForm();
+        $login_form->handleRequest($request);
+        if($login_form->isSubmitted() && $login_form->isValid()) {
+            
+            $login = $login_form['login']->getData();
+            $users = $this->getDoctrine()->getRepository(User::class)->findByLogin($login);
+            
+            return $this->render('/admin/users.html.twig', array(
+                'login_form' => $login_form->createView(),
+                'users' => $users));
+        }
+
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-        return $this->render('/admin/users.html.twig', array('users' => $users));
+        return $this->render('/admin/users.html.twig', array(
+            'login_form' => $login_form->createView(),
+            'users' => $users));
     }
     /* Ajouter un nouvel utilisateur */
-    public function ajouter_user($id,Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+    public function ajouter_user(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
         $user = new User;
         //Formulaire
         $ajouter_user_form = $this->createForm(UserFormType::class, $user);
@@ -47,7 +66,7 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            //
+            
             return $this->redirectToRoute('admin_users');
         }
         return $this->render('/admin/ajouterUser.html.twig',
@@ -97,7 +116,7 @@ class AdminController extends AbstractController
         $user = new User;
         $em = $this->getDoctrine()->getManager();
         $repo = $this->getDoctrine()->getRepository(User::class);
-        $film = $repo->find($id);
+        $user = $repo->find($id);
         $em->persist($user);
         $em->remove($user); 
         $em->flush();

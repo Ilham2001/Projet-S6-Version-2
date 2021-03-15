@@ -3,6 +3,18 @@
 {% block body %}
     <div>
         <h2 class="titre">Utilisateurs</h2>
+        <div>
+            {{ form_start(login_form) }}
+            <div class="">
+                {{ form_errors(login_form) }}
+            </div>
+            <div class="zone_filtre">
+                <ul>
+                    <li><div class="input">{{ form_row(login_form.login) }}</div></li>
+                    <li><div class="input">{{ form_row(login_form.rechercher)}}</div></li>
+            </div>
+            {{ form_end(login_form) }}
+        </div>
         <a href="{{ path('admin_ajouter_user') }}" id="ajouter_utilisateur">+ Ajouter un utilisateur</a>
 
         <table class="tableau_de_resultats tableau_utilisateurs">
@@ -27,13 +39,21 @@
                             {% endif %}
                         {% endfor %}
                     </th>
-                    <th><a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_user', {'id' : user.id }) }}">Modifier</a></th>
-                    <th><button id="button_supprimer" class="button_admin" onclick="">Supprimer</button></th>
+                    <th>
+                        <a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_user', {'id' : user.id }) }}">Modifier</a>
+                    </th>
+                    <th>
+                        <a id="button_supprimer" class="button_admin" href="{{ path('admin_supprimer_user', {'id' : user.id }) }}" 
+                        onclick="return confirm('Voulez-vous supprimer cet utilisateur ?')">Supprimer</a></th>
                 </tr>
                 {% else %}
-                    <p>Aucun utilisateur inscrit</p>
+                <tr>
+                    <th colspan="5"><center>Aucun utilisateur inscrit</center></th>
+                </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
+        
     </div>
 {% endblock %}

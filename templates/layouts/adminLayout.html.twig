@@ -9,6 +9,7 @@
 
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
+            <script type="text/javascript" src="/js/modalScript.js"></script>
         {% endblock %}
     </head>
     <body>
@@ -17,7 +18,7 @@
             <nav>
                 <ul class="nav_liens">
                     <li><a href="{{ path('admin_questions') }}">Questions</a></li>
-                    <li><a href="{{ path('admin_users') }}">Enseignants</a></li>
+                    <li><a href="{{ path('admin_users') }}">Utilisateurs</a></li>
                     <li><a href="{{ path('admin_evaluations') }}">Evaluations</a></li>
                     <li><a href="{{ path('logout') }}">Se deconnecter</a></li>
                 </ul>
