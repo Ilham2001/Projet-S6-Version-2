@@ -27,16 +27,26 @@
             <tr>
                 <th>Question</th>
                 <th>Propositions</th>
-                <th>Action</th>
+                <th>Modification</th>
+                <th>Suppression</th>
             </tr>
+            {% for question in questions %}
             <tr>
-                <th>question1</th>
-                <th>propo</th>
+                <th>{{ question.contenuQuestion }}</th>
                 <th>
-                    <a id="button_modifier" class="button_admin" href="">Consulter</a>
-                    <button id="button_generer" class="button_admin" onclick="">Générer</button>
+                    {% for proposition in question.propositionsQuestion %}
+                        {{ proposition }}
+                    {% endfor %}
                 </th>
+                <th><a id="button_modifier" class="button_admin" href="">Modifier</a></th>
+                <th><a href="{{ path('admin_supprimer_question', {'id' : question.id }) }}" id="button_supprimer" 
+                    class="button_admin" onclick="return confirm('Voulez-vous supprimer cette question ?')">Supprimer</a></th>
             </tr>
+            {% else %}
+            <tr>
+                <th colspan="4"><center>Aucun résultat</center></th>
+            </tr>
+            {% endfor %}
         </table>
     </div>
 {% endblock %}

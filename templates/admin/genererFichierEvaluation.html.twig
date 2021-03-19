@@ -1,0 +1,25 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2 class="titre">Générer une évaluation</h2>
+        <table class="tableau_de_resultats tableau_utilisateurs">
+           
+                {% for question in evaluation.questionsEvaluation %}
+                <tr>
+                    <th>{{ question.contenuQuestion }}</th>
+                    <th>
+                        {% for proposition in question.propositionsQuestion %}
+                            {{ proposition }}
+                        {% endfor %}
+                    </th>
+                </tr>
+                {% else %}
+                <tr>
+                    <th colspan="2"><center>Aucun résultat</center></th>
+                </tr>
+                {% endfor %}
+                <button type="">Générer</button>
+        </table>
+    <div>
+{% endblock %}

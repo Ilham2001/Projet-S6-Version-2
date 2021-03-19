@@ -18,6 +18,10 @@ admin_generer_evaluation_suite :
     path: /generer_evaluation_suite
     controller: App\Controller\AdminController::generer_evaluation_suite
 
+admin_generer_fichier:
+    path: /generer_fichier/{id}
+    controller: App\Controller\AdminController::generer_fichier
+
 admin_questions :
     path: /questions
     controller: App\Controller\AdminController::questions_list
@@ -25,6 +29,10 @@ admin_questions :
 admin_ajouter_questions :
     path: /ajouter_question
     controller: App\Controller\AdminController::ajouter_question
+
+admin_supprimer_question :
+    path: /supprimer_question/{id}
+    controller: App\Controller\AdminController::supprimer_question
 
 admin_ajouter_categorie :
     path: /ajouter_categorie

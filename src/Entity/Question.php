@@ -22,37 +22,37 @@ class Question
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $contenu_question;
+    private $contenuQuestion;
 
     /**
      * @ORM\Column(type="array")
      */
-    private $propositions_question = [];
+    private $propositionsQuestion = [];
 
     /**
      * @ORM\Column(type="array", nullable=true)
      */
-    private $reponses_question = [];
+    private $reponsesQuestion = [];
 
     /**
      * @ORM\ManyToOne(targetEntity=TypeQuestion::class, inversedBy="questions")
      */
-    private $type_question;
+    private $typeQuestion;
 
     /**
      * @ORM\ManyToOne(targetEntity=Thematique::class, inversedBy="questions")
      */
-    private $thematique_question;
+    private $thematiqueQuestion;
 
     /**
      * @ORM\ManyToOne(targetEntity=Matiere::class, inversedBy="questions")
      */
-    private $matiere_question;
+    private $matiereQuestion;
 
     /**
      * @ORM\ManyToMany(targetEntity=Evaluation::class, inversedBy="questions")
      */
-    private $evaluation_question;
+    private $evaluationQuestion;
 
     public function __construct()
     {
@@ -67,72 +67,72 @@ class Question
 
     public function getContenuQuestion(): ?string
     {
-        return $this->contenu_question;
+        return $this->contenuQuestion;
     }
 
-    public function setContenuQuestion(string $contenu_question): self
+    public function setContenuQuestion(string $contenuQuestion): self
     {
-        $this->contenu_question = $contenu_question;
+        $this->contenuQuestion = $contenuQuestion;
 
         return $this;
     }
 
     public function getPropositionsQuestion(): ?array
     {
-        return $this->propositions_question;
+        return $this->propositionsQuestion;
     }
 
-    public function setPropositionsQuestion(array $propositions_question): self
+    public function setPropositionsQuestion(array $propositionsQuestion): self
     {
-        $this->propositions_question = $propositions_question;
+        $this->propositionsQuestion = $propositionsQuestion;
 
         return $this;
     }
 
     public function getReponsesQuestion(): ?array
     {
-        return $this->reponses_question;
+        return $this->reponsesQuestion;
     }
 
-    public function setReponsesQuestion(?array $reponses_question): self
+    public function setReponsesQuestion(?array $reponsesQuestion): self
     {
-        $this->reponses_question = $reponses_question;
+        $this->reponsesQuestion = $reponsesQuestion;
 
         return $this;
     }
 
     public function getTypeQuestion(): ?TypeQuestion
     {
-        return $this->type_question;
+        return $this->typeQuestion;
     }
 
-    public function setTypeQuestion(?TypeQuestion $type_question): self
+    public function setTypeQuestion(?TypeQuestion $typeQuestion): self
     {
-        $this->type_question = $type_question;
+        $this->typeQuestion = $typeQuestion;
 
         return $this;
     }
 
     public function getThematiqueQuestion(): ?Thematique
     {
-        return $this->thematique_question;
+        return $this->thematiqueQuestion;
     }
 
-    public function setThematiqueQuestion(?Thematique $thematique_question): self
+    public function setThematiqueQuestion(?Thematique $thematiqueQuestion): self
     {
-        $this->thematique_question = $thematique_question;
+        $this->thematiqueQuestion = $thematiqueQuestion;
 
         return $this;
     }
 
     public function getMatiereQuestion(): ?Matiere
     {
-        return $this->matiere_question;
+        return $this->matiereQuestion;
     }
 
-    public function setMatiereQuestion(?Matiere $matiere_question): self
+    public function setMatiereQuestion(?Matiere $matiereQuestion): self
     {
-        $this->matiere_question = $matiere_question;
+        $this->matiereQuestion = $matiereQuestion;
 
         return $this;
     }
@@ -142,13 +142,13 @@ class Question
      */
     public function getEvaluationQuestion(): Collection
     {
-        return $this->evaluation_question;
+        return $this->evaluationQuestion;
     }
 
     public function addEvaluationQuestion(Evaluation $evaluationQuestion): self
     {
-        if (!$this->evaluation_question->contains($evaluationQuestion)) {
-            $this->evaluation_question[] = $evaluationQuestion;
+        if (!$this->evaluationQuestion->contains($evaluationQuestion)) {
+            $this->evaluationQuestion[] = $evaluationQuestion;
         }
 
         return $this;
@@ -156,7 +156,7 @@ class Question
 
     public function removeEvaluationQuestion(Evaluation $evaluationQuestion): self
     {
-        $this->evaluation_question->removeElement($evaluationQuestion);
+        $this->evaluationQuestion->removeElement($evaluationQuestion);
 
         return $this;
     }

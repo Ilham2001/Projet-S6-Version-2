@@ -22,7 +22,7 @@ class Evaluation
     /**
      * @ORM\Column(type="array")
      */
-    private $questions_evaluation = [];
+    private $questionsEvaluation = [];
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -56,12 +56,12 @@ class Evaluation
 
     public function getQuestionsEvaluation(): ?array
     {
-        return $this->questions_evaluation;
+        return $this->questionsEvaluation;
     }
 
-    public function setQuestionsEvaluation(array $questions_evaluation): self
+    public function setQuestionsEvaluation(array $questionsEvaluation): self
     {
-        $this->questions_evaluation = $questions_evaluation;
+        $this->questionsEvaluation = $questionsEvaluation;
 
         return $this;
     }
@@ -83,7 +83,7 @@ class Evaluation
         return $this->dateEvaluation;
     }
 
-    public function setDateEvaluation(\DateTimeInterface $datEvaluation): self
+    public function setDateEvaluation(\DateTimeInterface $dateEvaluation): self
     {
         $this->dateEvaluation = $dateEvaluation;
 

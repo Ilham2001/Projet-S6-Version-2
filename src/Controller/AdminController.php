@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Evaluation;
 use App\Entity\Question;
+use App\Entity\Matiere;
 use App\Entity\Thematique;
 use App\Entity\TypeQuestion;
 use App\Form\UserFormType;
@@ -142,8 +143,10 @@ class AdminController extends AbstractController
         if($filtre_question_form->isSubmitted() && $filtre_question_form->isValid()) {
             dd("filtre quesiton");
         }
-        return $this->render('/admin/questions.html.twig',
-           array('filtre_question_form' => $filtre_question_form->createView()));
+        $questions = $this->getDoctrine()->getRepository(Question::class)->findAll();
+        return $this->render('/admin/questions.html.twig', array(
+            'filtre_question_form' => $filtre_question_form->createView(),
+            'questions' => $questions));
     }
 
     public function ajouter_question(Request $request)
@@ -163,16 +166,16 @@ class AdminController extends AbstractController
             dd('ajouter form');
         }
 
-        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(1);
-        $thema = $this->getDoctrine()->getRepository(Thematique::class)->find(2);
+        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(4);
+        $matiere = $this->getDoctrine()->getRepository(Matiere::class)->find(1);
         $question = new Question;
-        $propos = ["propo1", "propo2", "propo3"];
-        $reponses = ["propo1","propo3"];
-        $question->setContenuQuestion("Question 1");
+        $propos = ["propo1", "propo2", "propo3", "propo4"];
+        $reponses = ["propo1","propo2"];
+        $question->setContenuQuestion("Question 3");
         $question->setPropositionsQuestion($propos);
         $question->setReponsesQuestion($reponses);
         $question->setTypeQuestion($type);
-        $question->setThematiqueQuestion($thema);
+        $question->setMatiereQuestion($matiere);
         
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($question);
@@ -182,6 +185,21 @@ class AdminController extends AbstractController
         return $this->render('/admin/ajouterQuestion.html.twig',
            array('ajouter_question_form' => $ajouter_question_form->createView()));
     }
+
+    /* Supprimer question */
+    public function supprimer_question($id) {
+        $question = new Question;
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrine()->getRepository(Question::class);
+        $question = $repo->find($id);
+        $em->persist($question);
+        $em->remove($question); 
+        $em->flush();
+        //add flash here
+        return $this->redirectToRoute('admin_questions');
+    }
+
+    /* Ajouter thématique ou matière */
 
     public function ajouter_categorie(Request $request)
     {
@@ -221,20 +239,54 @@ class AdminController extends AbstractController
     }
     /* Générer une évaluation */
     public function generer_evaluation(Request $request) {
-        $generer_evaluation_form = $this->createFormBuilder(null)
-            ->add('evaluation_nom',TextType::class,array('label' => false))
-            /*-> array of obejcts of selectionned questions*/
-            ->add('ajouter',SubmitType::class,array('label' => 'Ajouter'))
-            ->getForm();
-        $generer_evaluation_form->handleRequest($request);
-        if($generer_evaluation_form->isSubmitted() && $generer_evaluation_form->isValid()) {
-            dd("generer");
-        }
-        return $this->render('/admin/genererEvaluation.html.twig');
+
+        $questions = $this->getDoctrine()->getRepository(Question::class)->findAll();
+        return $this->render('/admin/genererEvaluation.html.twig', array(
+            'questions' => $questions));
     }
     
+    /* Suite de la génération (création des fichiers) */
     public function generer_evaluation_suite() {
-        // init file system
+        $evaluation = new Evaluation;
+ 
+        if(isset($_POST['checkBox']) && !empty($_POST['checkBox'])){
+
+            $nom_evaluation = $_POST['nom_evaluation'];
+            $ids_of_selected_questions = $_POST['checkBox'];
+            $selected_questions = $this->getDoctrine()->getRepository(Question::class)->findById($ids_of_selected_questions);
+            /*foreach($ques as $question) {
+                var_dump($question->getTypeQuestion());
+            }*/
+            $user = $this->getUser();
+            //dd($user);
+            $evaluation->setQuestionsEvaluation($selected_questions);
+            $evaluation->setDateEvaluation(new \DateTime('@'.strtotime('now')));
+            $evaluation->setUser($user);
+            $evaluation->setNomEvaluation($nom_evaluation);
+            //dd($evaluation);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($evaluation);
+            $entityManager->flush();
+        }
+        return $this->render('/admin/genererFichierEvaluation.html.twig', array(
+            'evaluation' => $evaluation));
+    }
+
+    /* Générer le fichier */
+    public function generer_fichier(Request $request, $id) {
+        $nom_evaluation_form = $this->createFormBuilder(null)
+        ->add('nom_evaluation', TextType::class, array(
+            'label' => false, 'attr' => (array('placeholder' => 'Nom de l\'evaluation'))))
+        ->getForm();
+        $nom_evaluation_form->handleRequest($request);
+        if($nom_evaluation_form->isSubmitted() && $nom_evaluation_form->isValid()) {
+            $evaluation = $this->getDoctrine()->getRepository(Evaluation::class)->find($id);
+            dd($evaluation);
+        }
+    }
+    
+}
+/*        // init file system
         $fsObject = new Filesystem();
         $current_dir_path = getcwd();
         //new directory
@@ -253,7 +305,7 @@ class AdminController extends AbstractController
             echo "Error creating directory at". $exception->getPath();
         }*/
         // create a new file and add contents
-        try {
+        /*try {
             $new_file_path = $current_dir_path . "/test/question2.txt";
         
             $reponse = "ILHAM";
@@ -264,13 +316,8 @@ class AdminController extends AbstractController
                 $fsObject->dumpFile($new_file_path, "Qui repose dans la Grant's tomb ? {=".$reponse." ~Personne ~Napoléon ~Churchill ~Mère Teresa}\n");
                 /* IF FILE ALREADY EXISTS WE USE appenToFile */
                 //$fsObject->appendToFile($new_file_path, "This should be added to the end of the file.\n");
-            }
+           /* }
             
         } catch (IOExceptionInterface $exception) {
             echo "Error creating file at". $exception->getPath();
-        }
-        dd("ok done");
-    }
-
-    
-}
+        }*/
