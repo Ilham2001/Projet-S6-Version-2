@@ -21,6 +21,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class AdminController extends AbstractController
 {
@@ -30,28 +32,19 @@ class AdminController extends AbstractController
         return $this->render('/admin/index.html.twig');
     }
 
-    public function users_list(Request $request)
-    {
+    public function users_list(Request $request) {
         /* Filtre par login d'utilisateur */
         $login_form = $this->createFormBuilder(null)
-            ->add('login',TextType::class, array('attr' => [
-                'required' => false,
-                'placeholder' => 'Nom d\'utilisateur']))
-            ->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
-                    'Administrateur' => 'ROLE_ADMIN'
-                ],
-                'label' => 'Rôles' 
-            ])
+            ->add('rechercheData',TextType::class, array('attr' => [
+                'placeholder' => 'Rechercher un utilisateur ...']))
             ->add('rechercher',SubmitType::class,array('label' => 'Rechercher'))
             ->getForm();
         $login_form->handleRequest($request);
         if($login_form->isSubmitted() && $login_form->isValid()) {
             
-            $login = $login_form['login']->getData();
-            $role = $login_form['roles']->getData();
-            $users = $this->getDoctrine()->getRepository(User::class)->findByLogin($login,$role);
+            $rechercheData = $login_form['rechercheData']->getData();
+            //$role = $login_form['roles']->getData();
+            $users = $this->getDoctrine()->getRepository(User::class)->findByLoginorRole($rechercheData);
             
             return $this->render('/admin/users.html.twig', array(
                 'login_form' => $login_form->createView(),
@@ -137,33 +130,6 @@ class AdminController extends AbstractController
         //add flash here
         return $this->redirectToRoute('admin_users');
     }
-    /* Liste des evaluations */
-    public function evaluations_list(UserInterface $user)
-    {
-        $user = $this->getUser();
-        /* Find evaluations by user */
-        $user_evaluations = $this->getDoctrine()->getRepository(Evaluation::class)->findByUser($user);
-
-        $evaluations = $this->getDoctrine()->getRepository(Evaluation::class)->findAll();
-        return $this->render('/admin/evaluations.html.twig', array (
-            'userEvaluations' => $user_evaluations,
-            'evaluations' => $evaluations
-        ));
-    }
-    /* Générer une évaluation */
-    public function generer_evaluation(Request $request) {
-        $generer_evaluation_form = $this->createFormBuilder(null)
-            ->add('evaluation_nom',TextType::class,array('label' => false))
-            /*-> array of obejcts of selectionned questions*/
-            ->add('ajouter',SubmitType::class,array('label' => 'Ajouter'))
-            ->getForm();
-        $generer_evaluation_form->handleRequest($request);
-        if($generer_evaluation_form->isSubmitted() && $generer_evaluation_form->isValid()) {
-            dd("generer");
-        }
-        return $this->render('/admin/genererEvaluation.html.twig');
-    }
-
     public function questions_list(Request $request)
     {
         $filtre_question_form = $this->createFormBuilder(null)
@@ -236,4 +202,75 @@ class AdminController extends AbstractController
         return $this->render('/admin/ajouterCategorie.html.twig',
            array('ajouter_categorie_form' => $ajouter_categorie_form->createView()));
     }
+
+
+
+
+    /* Liste des evaluations */
+    public function evaluations_list(UserInterface $user)
+    {
+        $user = $this->getUser();
+        /* Find evaluations by user */
+        $user_evaluations = $this->getDoctrine()->getRepository(Evaluation::class)->findByUser($user);
+
+        $evaluations = $this->getDoctrine()->getRepository(Evaluation::class)->findAll();
+        return $this->render('/admin/evaluations.html.twig', array (
+            'userEvaluations' => $user_evaluations,
+            'evaluations' => $evaluations
+        ));
+    }
+    /* Générer une évaluation */
+    public function generer_evaluation(Request $request) {
+        $generer_evaluation_form = $this->createFormBuilder(null)
+            ->add('evaluation_nom',TextType::class,array('label' => false))
+            /*-> array of obejcts of selectionned questions*/
+            ->add('ajouter',SubmitType::class,array('label' => 'Ajouter'))
+            ->getForm();
+        $generer_evaluation_form->handleRequest($request);
+        if($generer_evaluation_form->isSubmitted() && $generer_evaluation_form->isValid()) {
+            dd("generer");
+        }
+        return $this->render('/admin/genererEvaluation.html.twig');
+    }
+    
+    public function generer_evaluation_suite() {
+        // init file system
+        $fsObject = new Filesystem();
+        $current_dir_path = getcwd();
+        //new directory
+        /*try {
+            $new_dir_path = $current_dir_path . "/test";
+         
+            if (!$fsObject->exists($new_dir_path))
+            {
+                $old = umask(0);
+                $fsObject->mkdir($new_dir_path, 0775);
+                $fsObject->chown($new_dir_path, "www-data");
+                $fsObject->chgrp($new_dir_path, "www-data");
+                umask($old);
+            }
+        } catch (IOExceptionInterface $exception) {
+            echo "Error creating directory at". $exception->getPath();
+        }*/
+        // create a new file and add contents
+        try {
+            $new_file_path = $current_dir_path . "/test/question2.txt";
+        
+            $reponse = "ILHAM";
+            if (!$fsObject->exists($new_file_path))
+            {
+                $fsObject->touch($new_file_path);
+                $fsObject->chmod($new_file_path, 0777);
+                $fsObject->dumpFile($new_file_path, "Qui repose dans la Grant's tomb ? {=".$reponse." ~Personne ~Napoléon ~Churchill ~Mère Teresa}\n");
+                /* IF FILE ALREADY EXISTS WE USE appenToFile */
+                //$fsObject->appendToFile($new_file_path, "This should be added to the end of the file.\n");
+            }
+            
+        } catch (IOExceptionInterface $exception) {
+            echo "Error creating file at". $exception->getPath();
+        }
+        dd("ok done");
+    }
+
+    
 }

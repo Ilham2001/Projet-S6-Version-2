@@ -14,6 +14,10 @@ admin_generer_evaluation :
     path: /generer_evaluation
     controller: App\Controller\AdminController::generer_evaluation
 
+admin_generer_evaluation_suite :
+    path: /generer_evaluation_suite
+    controller: App\Controller\AdminController::generer_evaluation_suite
+
 admin_questions :
     path: /questions
     controller: App\Controller\AdminController::questions_list
