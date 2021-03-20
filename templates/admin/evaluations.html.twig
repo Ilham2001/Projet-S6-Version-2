@@ -23,7 +23,7 @@
                     <th> {{ evaluation.dateEvaluation ? evaluation.dateEvaluation|date('m/d/Y') }} </th>
                     <th> {{ evaluation.user.login }} </th>
                     <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
-                    <th><button id="button_generer" class="button_admin" onclick="">Générer</button></th>
+                    <th><a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a></th>
                 </tr>
                 {% else %}
                  <tr>
@@ -36,7 +36,7 @@
                     <th> {{ evaluation.nomEvaluation }} </th>
                     <th> {{ evaluation.dateEvaluation ? evaluation.dateEvaluation|date('m/d/Y') }} </th>
                     <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
-                    <th><button id="button_generer" class="button_admin" onclick="">Générer</button></th>
+                    <th><a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a></th>
                 </tr>
                 {% else %}
                  <tr>

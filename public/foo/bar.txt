@@ -1,2 +1,0 @@
-Adding dummy content to bar.txt file.
-This should be added to the end of the file.

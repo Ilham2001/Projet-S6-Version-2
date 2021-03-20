@@ -44,6 +44,12 @@ class Evaluation
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $contenuFichier;
+
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -125,6 +131,18 @@ class Evaluation
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getContenuFichier(): ?string
+    {
+        return $this->contenuFichier;
+    }
+
+    public function setContenuFichier(?string $contenuFichier): self
+    {
+        $this->contenuFichier = $contenuFichier;
 
         return $this;
     }

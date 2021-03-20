@@ -22,6 +22,10 @@ admin_generer_fichier:
     path: /generer_fichier/{id}
     controller: App\Controller\AdminController::generer_fichier
 
+admin_telecharger_fichier :
+    path: /telecharger_fichier
+    controller : App\Controller\AdminController::telecharger_fichier
+
 admin_questions :
     path: /questions
     controller: App\Controller\AdminController::questions_list

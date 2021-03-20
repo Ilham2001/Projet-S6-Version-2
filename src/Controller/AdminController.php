@@ -24,6 +24,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class AdminController extends AbstractController
 {
@@ -166,12 +168,12 @@ class AdminController extends AbstractController
             dd('ajouter form');
         }
 
-        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(4);
-        $matiere = $this->getDoctrine()->getRepository(Matiere::class)->find(1);
+        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(1);
+        $matiere = $this->getDoctrine()->getRepository(Matiere::class)->find(2);
         $question = new Question;
-        $propos = ["propo1", "propo2", "propo3", "propo4"];
-        $reponses = ["propo1","propo2"];
-        $question->setContenuQuestion("Question 3");
+        $propos = ["Vrai", "Faux"];
+        $reponses = ["Faux"];
+        $question->setContenuQuestion("Question vrai ou faux de réponse FAUX");
         $question->setPropositionsQuestion($propos);
         $question->setReponsesQuestion($reponses);
         $question->setTypeQuestion($type);
@@ -259,10 +261,57 @@ class AdminController extends AbstractController
             }*/
             $user = $this->getUser();
             //dd($user);
-            $evaluation->setQuestionsEvaluation($selected_questions);
+            foreach($selected_questions as $question) {
+                $evaluation->addQuestion($question);
+            }
+            //dd($evaluation);
             $evaluation->setDateEvaluation(new \DateTime('@'.strtotime('now')));
             $evaluation->setUser($user);
             $evaluation->setNomEvaluation($nom_evaluation);
+            $evaluation->setContenuFichier("");
+
+            $questions = $evaluation->getQuestions();
+    
+            $fichier = new Filesystem();
+            $chemin_courant = getcwd();
+    
+            foreach($questions as $question) {
+                $type_question = $question->getTypeQuestion();
+                if($type_question->getId() == 1) {
+                    $reponses = $question->getReponsesQuestion();
+                    if($reponses[0] == "Vrai") {
+    
+                        try {
+                            $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
+                            if(!$fichier->exists($chemin_fichier)) {
+                                $fichier->touch($chemin_fichier);
+                                $fichier->chmod($chemin_fichier,0777);
+                                $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
+                            }
+                            else{
+                                $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{T}\n");
+                            }
+                        } catch(IOExceptionInterface $exception) {
+                            echo "Error creating file at". $exception->getPath();
+                        }
+                    }
+                    elseif($reponses[0] == "Faux") {
+                        try {
+                            $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
+                            if(!$fichier->exists($chemin_fichier)) {
+                                $fichier->touch($chemin_fichier);
+                                $fichier->chmod($chemin_fichier,0777);
+                                $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
+                            }
+                            else{
+                                $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{F}\n");
+                            }
+                        } catch(IOExceptionInterface $exception) {
+                            echo "Error creating file at". $exception->getPath();
+                        }
+                    }
+                }
+            }
             //dd($evaluation);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($evaluation);
@@ -274,50 +323,86 @@ class AdminController extends AbstractController
 
     /* Générer le fichier */
     public function generer_fichier(Request $request, $id) {
-        $nom_evaluation_form = $this->createFormBuilder(null)
-        ->add('nom_evaluation', TextType::class, array(
-            'label' => false, 'attr' => (array('placeholder' => 'Nom de l\'evaluation'))))
-        ->getForm();
-        $nom_evaluation_form->handleRequest($request);
-        if($nom_evaluation_form->isSubmitted() && $nom_evaluation_form->isValid()) {
-            $evaluation = $this->getDoctrine()->getRepository(Evaluation::class)->find($id);
-            dd($evaluation);
-        }
-    }
-    
-}
-/*        // init file system
-        $fsObject = new Filesystem();
-        $current_dir_path = getcwd();
-        //new directory
-        /*try {
-            $new_dir_path = $current_dir_path . "/test";
-         
-            if (!$fsObject->exists($new_dir_path))
-            {
-                $old = umask(0);
-                $fsObject->mkdir($new_dir_path, 0775);
-                $fsObject->chown($new_dir_path, "www-data");
-                $fsObject->chgrp($new_dir_path, "www-data");
-                umask($old);
-            }
-        } catch (IOExceptionInterface $exception) {
-            echo "Error creating directory at". $exception->getPath();
-        }*/
-        // create a new file and add contents
-        /*try {
-            $new_file_path = $current_dir_path . "/test/question2.txt";
         
-            $reponse = "ILHAM";
-            if (!$fsObject->exists($new_file_path))
-            {
-                $fsObject->touch($new_file_path);
-                $fsObject->chmod($new_file_path, 0777);
-                $fsObject->dumpFile($new_file_path, "Qui repose dans la Grant's tomb ? {=".$reponse." ~Personne ~Napoléon ~Churchill ~Mère Teresa}\n");
-                /* IF FILE ALREADY EXISTS WE USE appenToFile */
-                //$fsObject->appendToFile($new_file_path, "This should be added to the end of the file.\n");
-           /* }
-            
-        } catch (IOExceptionInterface $exception) {
-            echo "Error creating file at". $exception->getPath();
+        $evaluation = $this->getDoctrine()->getRepository(Evaluation::class)->find($id);
+        /* Set File Content */
+
+        $questions = $evaluation->getQuestions();
+        $contenu_fichier = $evaluation->getContenuFichier();
+
+        $fichier = new Filesystem();
+        $chemin_courant = getcwd();
+
+        /*foreach($questions as $question) {
+            $type_question = $question->getTypeQuestion();
+            if($type_question->getId() == 1) {
+                $reponses = $question->getReponsesQuestion();
+                if($reponses[0] == "Vrai") {
+
+                    try {
+                        $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
+                        if(!$fichier->exists($chemin_fichier)) {
+                            $fichier->touch($chemin_fichier);
+                            $fichier->chmod($chemin_fichier,0777);
+                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
+                        }
+                        else{
+                            $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{T}\n");
+                        }
+                    } catch(IOExceptionInterface $exception) {
+                        echo "Error creating file at". $exception->getPath();
+                    }
+                }
+                elseif($reponses[0] == "Faux") {
+                    try {
+                        $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
+                        if(!$fichier->exists($chemin_fichier)) {
+                            $fichier->touch($chemin_fichier);
+                            $fichier->chmod($chemin_fichier,0777);
+                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
+                        }
+                        else{
+                            $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{F}\n");
+                        }
+                    } catch(IOExceptionInterface $exception) {
+                        echo "Error creating file at". $exception->getPath();
+                    }
+                }
+            }
         }*/
+     /*                                 
+                //}
+                /*elseif ($type_question->getId() == 2) { // Réponse libre
+                    dd("libre");
+                }
+                elseif ($type_question->getId() == 3) { // Choix unique
+                    dd("choix unique");
+                }
+                elseif ($type_question->getId() == 4) { // Choix multiple
+                    dd("choix multi");
+                }
+                elseif ($type_question->getId() == 5) { // Réponse numérique
+                    dd("num");
+                }
+                elseif ($type_question->getId() == 6 ) { // Mots manquants
+                    dd("mots manquants");
+                }*/
+/*
+            }     */        
+        
+            //return $this->redirectToRoute('admin_telecharger_fichier');
+        $publicDir = $this->getParameter('kernel.project_dir') . '/public/';
+       $response = new BinaryFileResponse($publicDir .'/fichiers/fichier2.txt');
+       $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,'fichier2.txt');
+        return $response;
+    }
+
+    public function telecharger_fichier()
+    {
+        //$response = new BinaryFileResponse('/fichiers/fichier2.txt');
+        //$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,'fichier2.txt');
+        //return $response;
+        dd("ok");
+    }
+
+}

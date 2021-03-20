@@ -52,7 +52,7 @@ class Question
     /**
      * @ORM\ManyToMany(targetEntity=Evaluation::class, inversedBy="questions")
      */
-    private $evaluationQuestion;
+    private $evaluation_question;
 
     public function __construct()
     {
@@ -145,10 +145,10 @@ class Question
         return $this->evaluationQuestion;
     }
 
-    public function addEvaluationQuestion(Evaluation $evaluationQuestion): self
+    public function addEvaluationQuestion(Evaluation $evaluation_question): self
     {
-        if (!$this->evaluationQuestion->contains($evaluationQuestion)) {
-            $this->evaluationQuestion[] = $evaluationQuestion;
+        if (!$this->evaluation_question->contains($evaluation_question)) {
+            $this->evaluation_question[] = $evaluation_question;
         }
 
         return $this;
