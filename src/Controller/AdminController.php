@@ -168,14 +168,14 @@ class AdminController extends AbstractController
             dd('ajouter form');
         }
 
-        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(2); //reponse libre
+        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(4);
         $thematique = $this->getDoctrine()->getRepository(Thematique::class)->find(1); //culture generale
         $question = new Question;
-        //$propos = ["Paris", "Rabat", "London", "Seoul"];
-        //$reponses = ["Paris"];
-        $question->setContenuQuestion("Écrivez en 10 lignes votre biographie.");
-        //$question->setPropositionsQuestion($propos);
-        //$question->setReponsesQuestion($reponses);
+        $propos = ["Bonne réponse1", "Bonne réponse2", "Bonne réponse3", "Bonne réponse4", "Mauvaise réponse"];
+        $reponses = ["Bonne réponse1", "Bonne réponse2", "Bonne réponse3", "Bonne réponse4"];
+        $question->setContenuQuestion("Quelle est a réponse à cette question à choix multiples ?");
+        $question->setPropositionsQuestion($propos);
+        $question->setReponsesQuestion($reponses);
         $question->setTypeQuestion($type);
         $question->setThematiqueQuestion($thematique);
         
@@ -239,6 +239,19 @@ class AdminController extends AbstractController
             'evaluations' => $evaluations
         ));
     }
+    /* Supprimer évaluation */
+    public function supprimer_evaluation($id) {
+        $evaluation = new Evaluation;
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrine()->getRepository(Evaluation::class);
+        $evaluation = $repo->find($id);
+        $em->persist($evaluation);
+        $em->remove($evaluation); 
+        $em->flush();
+        //add flash here
+        return $this->redirectToRoute('admin_evaluations');
+    }
+
     /* Générer une évaluation */
     public function generer_evaluation(Request $request) {
 
@@ -358,8 +371,108 @@ class AdminController extends AbstractController
                         echo "Error creating file at". $exception->getPath();
                     }
                 }
+                /* Réponse de type choix multiple */
+                elseif ($type_question->getId() == 4) {
+                    $reponses = $question->getReponsesQuestion();
+                    $propos = $question->getPropositionsQuestion();
+                    
+                    try {
+                        $chemin_fichier = $chemin_courant . "/fichiers/". $evaluation->getNomEvaluation() .".txt";
+                        /* If file doesn't exist */
+                        if(!$fichier->exists($chemin_fichier)) {
+                            $fichier->touch($chemin_fichier);
+                            $fichier->chmod($chemin_fichier,0777);
+                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion() . " {\n");
+                            /* S'il y a 1 réponse correcte */
+                            if(sizeof($reponses) == 1) {
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%100%".$reponse."\n");
+                                }
+                            }
+                            /* 2 réponses correctes */
+                            elseif(sizeof($reponses) == 2) {
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%50%".$reponse."\n");
+                                }
+                            }
+                            /* 3 réponses correctes */
+                            elseif(sizeof($reponses) == 3) {
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%33.33333%".$reponse."\n");
+                                }
+                            }
+                            /* 4 réponses correctes */
+                            elseif(sizeof($reponses) == 4) { 
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%25%".$reponse."\n");
+                                }
+                            }
+                           
+                            foreach($propos as $propo) {
+                                if(!in_array($propo,$reponses)) {
+                                    $fichier->appendToFile($chemin_fichier, "~%0%".$propo."\n");
+                                }
+                            }
+                            $fichier->appendToFile($chemin_fichier, "}\n");
+                        }
+                        /* If file already exists */
+                        else{
+                            $fichier->appendToFile($chemin_fichier, "\n".$question->getContenuQuestion()." {\n");
+                            /* S'il y a 1 réponse correcte */
+                            if(sizeof($reponses) == 1) {
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%100%".$reponse."\n");
+                                }
+                            }
+                            /* S'il y a 2 réponses correctes */  
+                            elseif(sizeof($reponses) == 2) {
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%50%".$reponse."\n");
+                                }
+                            }
+                            /* 3 réponses correctes */
+                            elseif(sizeof($reponses) == 3) {
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%33.33333%".$reponse."\n");
+                                }
+                            }
+                            /* 4 réponses correctes */
+                            elseif(sizeof($reponses) == 4) { 
+                                foreach($reponses as $reponse) {
+                                    $fichier->appendToFile($chemin_fichier, "~%25%".$reponse."\n");
+                                }
+                            }
+                            foreach($propos as $propo) {
+                                if(!in_array($propo,$reponses)) {
+                                    $fichier->appendToFile($chemin_fichier, "~%0%".$propo."\n");
+                                }
+                            }
+                            $fichier->appendToFile($chemin_fichier, "}\n");
+                            
+                        }
+                    } catch(IOExceptionInterface $exception) {
+                        echo "Error creating file at". $exception->getPath();
+                    }
+                }
+                /* Question de type réponse numérique */
+                elseif ($type_question->getId() == 5) {
+                    $reponses = $question->getReponsesQuestion();
+                    try {
+                        $chemin_fichier = $chemin_courant . "/fichiers/". $evaluation->getNomEvaluation() .".txt";
+                        if(!$fichier->exists($chemin_fichier)) {
+                            $fichier->touch($chemin_fichier);
+                            $fichier->chmod($chemin_fichier,0777);
+                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion() . " {#". $reponses[0]."}\n");
+                        }
+                        
+                        else{
+                            $fichier->appendToFile($chemin_fichier, "\n".$question->getContenuQuestion() . " {#". $reponses[0]."}\n");
+                        }
+                    } catch(IOExceptionInterface $exception) {
+                        echo "Error creating file at". $exception->getPath();
+                    }
+                }
             }
-            //dd($evaluation);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($evaluation);
             $entityManager->flush();
@@ -372,24 +485,6 @@ class AdminController extends AbstractController
     public function generer_fichier(Request $request, $id) {
         
         $evaluation = $this->getDoctrine()->getRepository(Evaluation::class)->find($id);
-                           
-                //}
-                /*elseif ($type_question->getId() == 2) { // Réponse libre
-                    dd("libre");
-                }
-                elseif ($type_question->getId() == 3) { // Choix unique
-                    dd("choix unique");
-                }
-                elseif ($type_question->getId() == 4) { // Choix multiple
-                    dd("choix multi");
-                }
-                elseif ($type_question->getId() == 5) { // Réponse numérique
-                    dd("num");
-                }
-                */
-            /*
-            }     */        
-            //return $this->redirectToRoute('admin_telecharger_fichier');
         $publicDir = $this->getParameter('kernel.project_dir') . '/public/';
         $response = new BinaryFileResponse($publicDir .'/fichiers/'. $evaluation->getNomEvaluation().'.txt');
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $evaluation->getNomEvaluation().'.txt');

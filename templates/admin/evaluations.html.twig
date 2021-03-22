@@ -11,8 +11,7 @@
                     <th>Nom</th>
                     <th>Date de création</th>
                     <th>Utilisateur</th>
-                    <th>Consultation</th>
-                    <th>Génération</th>
+                    <th>Action</th>
                 </tr>
             </head>
             <tbody>
@@ -22,8 +21,12 @@
                     <th> {{ evaluation.nomEvaluation }} </th>
                     <th> {{ evaluation.dateEvaluation ? evaluation.dateEvaluation|date('m/d/Y') }} </th>
                     <th> {{ evaluation.user.login }} </th>
-                    <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
-                    <th><a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a></th>
+                    <th>
+                        <a id="button_modifier" class="button_admin" href="">Consulter</a>
+                        <a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a>
+                        <a href="{{ path('admin_supprimer_evaluation', {'id' : evaluation.id }) }}" id="button_supprimer" 
+                            class="button_admin" onclick="return confirm('Voulez-vous supprimer cette evaluation ?')">Supprimer</a>
+                    </th>
                 </tr>
                 {% else %}
                  <tr>
@@ -35,8 +38,12 @@
                 <tr>
                     <th> {{ evaluation.nomEvaluation }} </th>
                     <th> {{ evaluation.dateEvaluation ? evaluation.dateEvaluation|date('m/d/Y') }} </th>
-                    <th><a id="button_modifier" class="button_admin" href="">Consulter</a></th>
-                    <th><a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a></th>
+                    <th>
+                        <a id="button_modifier" class="button_admin" href="">Consulter</a>
+                        <a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a>
+                        <a href="{{ path('admin_supprimer_evaluation', {'id' : evaluation.id }) }}" id="button_supprimer" 
+                            class="button_admin" onclick="return confirm('Voulez-vous supprimer cette evaluation ?')">Supprimer</a>
+                    </th>
                 </tr>
                 {% else %}
                  <tr>

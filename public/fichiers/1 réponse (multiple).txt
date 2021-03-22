@@ -1,0 +1,6 @@
+Quelle est a réponse à cette question à choix multiples ? {
+~%100%Bonne réponse1
+~%0%Bonne réponse2
+~%0%Bonne réponse3
+~%0%Mauvaise réponse
+}

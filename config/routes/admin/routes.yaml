@@ -18,6 +18,10 @@ admin_generer_evaluation_suite :
     path: /generer_evaluation_suite
     controller: App\Controller\AdminController::generer_evaluation_suite
 
+admin_supprimer_evaluation :
+    path: /supprimer_evaluation/{id}
+    controller: App\Controller\AdminController::supprimer_evaluation
+
 admin_generer_fichier:
     path: /generer_fichier/{id}
     controller: App\Controller\AdminController::generer_fichier
