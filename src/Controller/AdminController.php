@@ -168,16 +168,16 @@ class AdminController extends AbstractController
             dd('ajouter form');
         }
 
-        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(1);
-        $matiere = $this->getDoctrine()->getRepository(Matiere::class)->find(2);
+        $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find(2); //reponse libre
+        $thematique = $this->getDoctrine()->getRepository(Thematique::class)->find(1); //culture generale
         $question = new Question;
-        $propos = ["Vrai", "Faux"];
-        $reponses = ["Faux"];
-        $question->setContenuQuestion("Question vrai ou faux de réponse FAUX");
-        $question->setPropositionsQuestion($propos);
-        $question->setReponsesQuestion($reponses);
+        //$propos = ["Paris", "Rabat", "London", "Seoul"];
+        //$reponses = ["Paris"];
+        $question->setContenuQuestion("Écrivez en 10 lignes votre biographie.");
+        //$question->setPropositionsQuestion($propos);
+        //$question->setReponsesQuestion($reponses);
         $question->setTypeQuestion($type);
-        $question->setMatiereQuestion($matiere);
+        $question->setThematiqueQuestion($thematique);
         
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($question);
@@ -256,9 +256,7 @@ class AdminController extends AbstractController
             $nom_evaluation = $_POST['nom_evaluation'];
             $ids_of_selected_questions = $_POST['checkBox'];
             $selected_questions = $this->getDoctrine()->getRepository(Question::class)->findById($ids_of_selected_questions);
-            /*foreach($ques as $question) {
-                var_dump($question->getTypeQuestion());
-            }*/
+  
             $user = $this->getUser();
             //dd($user);
             foreach($selected_questions as $question) {
@@ -271,25 +269,26 @@ class AdminController extends AbstractController
             $evaluation->setContenuFichier("");
 
             $questions = $evaluation->getQuestions();
-    
+            /* Créer fichier */
             $fichier = new Filesystem();
             $chemin_courant = getcwd();
     
             foreach($questions as $question) {
                 $type_question = $question->getTypeQuestion();
+                /* Question de type Vrai ou Faux */
                 if($type_question->getId() == 1) {
                     $reponses = $question->getReponsesQuestion();
                     if($reponses[0] == "Vrai") {
     
                         try {
-                            $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
+                            $chemin_fichier = $chemin_courant . "/fichiers/". $evaluation->getNomEvaluation() .".txt";
                             if(!$fichier->exists($chemin_fichier)) {
                                 $fichier->touch($chemin_fichier);
                                 $fichier->chmod($chemin_fichier,0777);
-                                $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
+                                $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()." {T}\n");
                             }
                             else{
-                                $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{T}\n");
+                                $fichier->appendToFile($chemin_fichier,"\n".$question->getContenuQuestion()." {T}\n");
                             }
                         } catch(IOExceptionInterface $exception) {
                             echo "Error creating file at". $exception->getPath();
@@ -297,18 +296,66 @@ class AdminController extends AbstractController
                     }
                     elseif($reponses[0] == "Faux") {
                         try {
-                            $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
+                            $chemin_fichier = $chemin_courant . "/fichiers/". $evaluation->getNomEvaluation() .".txt";
                             if(!$fichier->exists($chemin_fichier)) {
                                 $fichier->touch($chemin_fichier);
                                 $fichier->chmod($chemin_fichier,0777);
-                                $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
+                                $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()." {F}\n");
                             }
                             else{
-                                $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{F}\n");
+                                $fichier->appendToFile($chemin_fichier,"\n".$question->getContenuQuestion()." {F}\n");
                             }
                         } catch(IOExceptionInterface $exception) {
                             echo "Error creating file at". $exception->getPath();
                         }
+                    }
+                } 
+                /* Question de type réponse libre */
+                elseif($type_question->getId() == 2) {
+                    try {
+                        $chemin_fichier = $chemin_courant . "/fichiers/". $evaluation->getNomEvaluation() .".txt";
+                        if(!$fichier->exists($chemin_fichier)) {
+                            $fichier->touch($chemin_fichier);
+                            $fichier->chmod($chemin_fichier,0777);
+                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion() . " {}\n");
+                        }
+                        else{
+                            $fichier->appendToFile($chemin_fichier, "\n".$question->getContenuQuestion() . " {}\n");
+                        }
+                    } catch(IOExceptionInterface $exception) {
+                        echo "Error creating file at". $exception->getPath();
+                    }
+                }
+                /* Question de type choix unique */
+                elseif($type_question->getId() == 3) {
+                    $reponses = $question->getReponsesQuestion();
+                    $propos = $question->getPropositionsQuestion();
+                    //dd($propos);
+                    try {
+                        $chemin_fichier = $chemin_courant . "/fichiers/". $evaluation->getNomEvaluation() .".txt";
+                        if(!$fichier->exists($chemin_fichier)) {
+                            $fichier->touch($chemin_fichier);
+                            $fichier->chmod($chemin_fichier,0777);
+                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion() . " ");
+                            $fichier->appendToFile($chemin_fichier," {=".$reponses[0]);
+                            foreach($propos as $propo) {
+                                if($propo!=$reponses[0])
+                                $fichier->appendToFile($chemin_fichier, " ~" . $propo );
+                            }
+                            $fichier->appendToFile($chemin_fichier, "}\n");
+                        }
+                        
+                        else{
+                            //dd($propos);
+                            $fichier->appendToFile($chemin_fichier, "\n".$question->getContenuQuestion()."{=".$reponses[0]);
+                            foreach($propos as $propo) {
+                                if($propo!=$reponses[0])
+                                    $fichier->appendToFile($chemin_fichier, " ~" . $propo );
+                                }
+                            $fichier->appendToFile($chemin_fichier, "}\n");
+                        }
+                    } catch(IOExceptionInterface $exception) {
+                        echo "Error creating file at". $exception->getPath();
                     }
                 }
             }
@@ -325,52 +372,7 @@ class AdminController extends AbstractController
     public function generer_fichier(Request $request, $id) {
         
         $evaluation = $this->getDoctrine()->getRepository(Evaluation::class)->find($id);
-        /* Set File Content */
-
-        $questions = $evaluation->getQuestions();
-        $contenu_fichier = $evaluation->getContenuFichier();
-
-        $fichier = new Filesystem();
-        $chemin_courant = getcwd();
-
-        /*foreach($questions as $question) {
-            $type_question = $question->getTypeQuestion();
-            if($type_question->getId() == 1) {
-                $reponses = $question->getReponsesQuestion();
-                if($reponses[0] == "Vrai") {
-
-                    try {
-                        $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
-                        if(!$fichier->exists($chemin_fichier)) {
-                            $fichier->touch($chemin_fichier);
-                            $fichier->chmod($chemin_fichier,0777);
-                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
-                        }
-                        else{
-                            $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{T}\n");
-                        }
-                    } catch(IOExceptionInterface $exception) {
-                        echo "Error creating file at". $exception->getPath();
-                    }
-                }
-                elseif($reponses[0] == "Faux") {
-                    try {
-                        $chemin_fichier = $chemin_courant . "/fichiers/fichier2.txt";
-                        if(!$fichier->exists($chemin_fichier)) {
-                            $fichier->touch($chemin_fichier);
-                            $fichier->chmod($chemin_fichier,0777);
-                            $fichier->dumpFile($chemin_fichier, $question->getContenuQuestion()."\n");
-                        }
-                        else{
-                            $fichier->appendToFile($chemin_fichier,$question->getContenuQuestion().".{F}\n");
-                        }
-                    } catch(IOExceptionInterface $exception) {
-                        echo "Error creating file at". $exception->getPath();
-                    }
-                }
-            }
-        }*/
-     /*                                 
+                           
                 //}
                 /*elseif ($type_question->getId() == 2) { // Réponse libre
                     dd("libre");
@@ -384,25 +386,14 @@ class AdminController extends AbstractController
                 elseif ($type_question->getId() == 5) { // Réponse numérique
                     dd("num");
                 }
-                elseif ($type_question->getId() == 6 ) { // Mots manquants
-                    dd("mots manquants");
-                }*/
-/*
+                */
+            /*
             }     */        
-        
             //return $this->redirectToRoute('admin_telecharger_fichier');
         $publicDir = $this->getParameter('kernel.project_dir') . '/public/';
-       $response = new BinaryFileResponse($publicDir .'/fichiers/fichier2.txt');
-       $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,'fichier2.txt');
+        $response = new BinaryFileResponse($publicDir .'/fichiers/'. $evaluation->getNomEvaluation().'.txt');
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $evaluation->getNomEvaluation().'.txt');
         return $response;
-    }
-
-    public function telecharger_fichier()
-    {
-        //$response = new BinaryFileResponse('/fichiers/fichier2.txt');
-        //$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,'fichier2.txt');
-        //return $response;
-        dd("ok");
     }
 
 }
