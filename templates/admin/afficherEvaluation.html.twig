@@ -1,0 +1,26 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2 class="titre">{{ evaluation.nomEvaluation }}</h2>
+
+        <table class="tableau_de_resultats tableau_utilisateurs">
+           
+            {% for question in evaluation.questions %}
+                <tr>
+                    <th>{{ question.contenuQuestion }}</th>
+                    <th>
+                        {% for proposition in question.propositionsQuestion %}
+                            {{ proposition }}
+                        {% endfor %}
+                    </th>
+                </tr>
+                {% else %}
+                <tr>
+                    <th colspan="2"><center>Aucun résultat</center></th>
+                </tr>
+                {% endfor %}
+                <a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}"  id="button_generer" class="button_admin">Télécharger</a>
+        </table>
+    </div>
+{% endblock %}

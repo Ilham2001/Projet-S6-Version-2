@@ -204,9 +204,17 @@ input {
     text-align: center;
 }
 .clock{
+    font-size: 130px;
     text-align:center;
     width:auto;
     height:auto;
+    padding: 60px;
+}
+.bonjour {
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 50px;
 }
 #icon_ajout {
     font-size: 7em;

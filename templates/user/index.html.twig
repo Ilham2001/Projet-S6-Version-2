@@ -1,11 +1,14 @@
 {% extends 'layouts/userLayout.html.twig' %}
 
 {% block body %}
+    <div class="bonjour">
+        <h1> Bonjour, {{ app.user.username }} ! </h1>
+    </div>
     <div class="clock">
-            <span id="hr">00</span>
-            <span> : </span>
-            <span id="min">00</span>
-            <span> : </span>
-            <span id="sec">00</span>
+        <span id="hr">00</span>
+        <span> : </span>
+        <span id="min">00</span>
+        <span> : </span>
+        <span id="sec">00</span>
     </div>
 {% endblock %}

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Accueil{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="/css/style.css">
         {% endblock %}
@@ -14,12 +14,13 @@
     </head>
     <body>
         <header>
-            <a href="" id="titre_page"></i>Accueil</a>
+            <a href="{{ path('user_index') }}" id="titre_page"></i>Accueil</a>
             <nav>
                 <ul class="nav_liens">
-                    <li><a href="">Questions</a></li>
-                    <li><a href="">Evaluations</a></li>
-                    <li><a href="">Se deconnecter</a></li>
+                    <li><a href="{{ path('user_questions') }}">Questions</a></li>
+                    <li><a href="{{ path('user_evaluations') }}">Evaluations</a></li>
+                    <li><a href="{{ path('user_thematiques_matieres') }}">Thematique/Matières</a></li>
+                    <li><a href="{{ path('logout') }}">Se deconnecter</a></li>
                 </ul>
             </nav>
         </header>

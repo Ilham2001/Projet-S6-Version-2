@@ -1,0 +1,31 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+
+{% block body %}
+ <p> 
+    {% set flash_notices = app.session.flashbag.get('Msg') %}
+                    {% set flash_notice = app.session.flashbag.get('MsgE') %}
+                    {% if flash_notice is not empty %}
+                        
+                            <div class="alert alert-danger">{{ Msg}} 
+                            
+                            </div>
+                        
+                    {% endif %}
+                    {% if flash_notices is not empty %}
+                        {% for Msg in flash_notices %}
+                            <div class="alert alert-success">{{ Msg}} </div>
+                        {% endfor%}
+                    {% endif %}
+    </p>
+    <h2 class="titre">Modification de la matiere</h2>
+    <div class="box">
+        <div class="box_ajout"> 
+          {{ form_start(form_matiere) }}
+            <div class="zone_input">
+                <div class="input">{{ form_row(form_matiere.libelleMatiere) }}</div>
+                <a href="" class="button_ajouter">{{ form_row(form_matiere.Enregistrer) }}</a>
+            </div>
+          {{ form_end(form_matiere) }}
+        </div>
+    </div>
+{% endblock %}

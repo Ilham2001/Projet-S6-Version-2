@@ -6,3 +6,39 @@ user_questions :
     path: /questions
     controller: App\Controller\UserController::questions_list
 
+user_ajouter_questions :
+    path: /ajouter_question
+    controller: App\Controller\UserController::ajouter_question
+
+user_evaluations :
+    path: /evaluations
+    controller: App\Controller\UserController::evaluations_list
+
+user_supprimer_evaluation :
+    path: /supprimer_evaluation/{id}
+    controller: App\Controller\AdminController::supprimer_evaluation
+
+    
+user_afficher_evaluation :
+    path : /afficher_evaluation/{id}
+    controller: App\Controller\UserController::afficher_evaluation
+
+user_generer_evaluation :
+    path: /generer_evaluation
+    controller: App\Controller\UserController::generer_evaluation
+
+user_generer_evaluation_suite :
+    path: /generer_evaluation_suite
+    controller: App\Controller\UserController::generer_evaluation_suite
+
+user_generer_fichier:
+    path: /generer_fichier/{id}
+    controller: App\Controller\UserController::generer_fichier
+
+user_ajouter_categorie :
+    path: /ajouter_categorie
+    controller: App\Controller\UserController::ajouter_categorie
+
+user_thematiques_matieres :
+    path: /thematiques_matieres
+    controller: App\Controller\UserController::thematiques_matieres

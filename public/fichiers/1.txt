@@ -1,6 +1,0 @@
-Question 3 {
-~%50%propo1
-~%50%propo2
-~%0%propo3
-~%0%propo4
-}

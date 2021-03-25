@@ -133,8 +133,7 @@ class AdminController extends AbstractController
         //add flash here
         return $this->redirectToRoute('admin_users');
     }
-    public function questions_list(Request $request)
-    {
+    public function questions_list(Request $request) {
         $filtre_question_form = $this->createFormBuilder(null)
             ->add('question',TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Rechercher une question...')))
             ->add('type',ChoiceType::class , array('label' => false, 'choices' => [ 'QCM' => null, 'Frai ou faux' => null, 'Item3' => null]))
@@ -201,26 +200,114 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_questions');
     }
 
+    /* Liste thématiques et matières */
+    public function thematiques_matieres(Request $request) {
+        $thematiques= new Thematique;
+        $matieres= new Matiere;
+        $form = $this->createFormBuilder(null)
+                ->add('titre', TextType::class)
+                ->add('submit', SubmitType::class, array('label' => 'Rechercher', 'attr' => ['class' => 'btn btn-primary']  ))
+                ->getForm();
+
+        $thematiques=$this->getDoctrine()->getRepository(Thematique::class)->findAll();
+        $matieres=$this->getDoctrine()->getRepository(Matiere::class)->findAll();
+
+        return $this->render('admin/thematiquesMatieres.html.twig',  
+            array( 'thematiques' => $thematiques,
+            'matieres'=>$matieres,
+            'myform' => $form->createView() ));
+    }
+    /* Supprimer thématique */ 
+    public function Supprimer($id) {
+        $em=$this->getDoctrine()->getManager();
+        $res=$em->getRepository(Thematique::class);
+        $Thematique=$res->find($id);
+        $em->remove($Thematique);
+        $em->flush();
+        $this->addFlash('danger', 'Thematique a été bien supprimé');
+        return $this->redirectToRoute('admin_thematiques_matieres',["Thematique"=>$Thematique]);
+    }
+
+    /* Supprimer matière */
+    public function supprimer_matiere($id) {
+        $en=$this->getDoctrine()->getManager();
+        $rest=$en->getRepository(Matiere::class);
+        $Matiere=$rest->find($id);
+        $en->remove($Matiere);
+        $en->flush();
+        $this->addFlash('danger', 'Matiere a été bien supprimé');
+        return $this->redirectToRoute('admin_thematiques_matieres',["Matiere"=>$Matiere]);
+    }
+    /* Modifier thématique */
+    public function modifier_thematique($id,Request $request) {
+        $thematique=$this->getDoctrine()->getRepository(Thematique::class)->find($id);
+        $form=$this->createForm(ThematiqueType::class,$thematique);
+
+        if ($request->isMethod('POST')) {
+            $form->submit($request->request->get($form->getName()));
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                
+    
+                $em=$this->getDoctrine()->getManager();
+                $em->flush();
+                // perform some action...
+                $this->addFlash('success', 'Thématique a été bien modifié');
+                return $this->redirectToRoute('admin_thematiques_matieres');
+            }
+        }
+        return $this->render('admin/modifierThematique.html.twig', [
+            
+            'form'  =>  $form->createView(),
+        ]);
+    }
+
+    /* Modifier matière */
+    public function modifier_matiere($id,Request $request) {
+        $matiere=$this->getDoctrine()->getRepository(Matiere::class)->find($id);
+        $form_matiere=$this->createForm(MatiereType::class,$matiere);
+
+        if ($request->isMethod('POST')) {
+            $form_matiere->submit($request->request->get($form_matiere->getName()));
+    
+            if ($form_matiere->isSubmitted() && $form_matiere->isValid()) {
+                
+    
+                $em=$this->getDoctrine()->getManager();
+                $em->flush();
+                // perform some action...
+                $this->addFlash('success', 'Matière a été bien modifié');
+                return $this->redirectToRoute('admin_thematiques_matieres');
+            }
+        }
+        return $this->render('admin/modifierMatiere.html.twig', [
+            
+            'form_matiere'  =>  $form_matiere->createView(),
+        ]);
+    }
     /* Ajouter thématique ou matière */
 
-    public function ajouter_categorie(Request $request)
-    {
-        $ajouter_categorie_form = $this->createFormBuilder(null)
-        ->add('categorie', ChoiceType::class, array('label' => false, 'choices' => array(
-                'Thématique' => 'thematique',
-                'Matière' => 'matiere',),
-                'expanded' => true))
-        ->add('nom_categorie', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Ex : Anglais')))
-        ->add('autre_categorie',ButtonType::class, array('label' => '+'))
-        ->add('ajouter',SubmitType::class, array('label' => 'Ajouter'))
-        ->getForm();
-        $ajouter_categorie_form->handleRequest($request);
-        if($ajouter_categorie_form->isSubmitted() && $ajouter_categorie_form->isValid()) {
-            dd('ajouter form');
+    public function ajouter_categorie(Request $request) {
+        $thematique = new Thematique;
+            $matiere = new Matiere;
+            $choix = $request->request->get("choix");
+            $Thematiqu = $request->request->get("Thematique");
+            $Matier = $request->request->get("Matiere");
+            $em = $this->getDoctrine()->getManager();
+
+        if($choix == 'thema') {
+            $thematique->setLibelleThematique($Thematiqu);
+            $em->persist($thematique);
+            $em->flush();
         }
 
-        return $this->render('/admin/ajouterCategorie.html.twig',
-           array('ajouter_categorie_form' => $ajouter_categorie_form->createView()));
+        if($choix == 'matiere') {
+            $matiere->setLibelleMatiere($Matier);
+            $em->persist($matiere);
+            $em->flush();
+            }
+        $message="Bien ajoutee ";
+        return $this->render('/admin/ajouterCategorie.html.twig',array('msg'=>$message));
     }
 
 
@@ -250,6 +337,14 @@ class AdminController extends AbstractController
         $em->flush();
         //add flash here
         return $this->redirectToRoute('admin_evaluations');
+    }
+    /* Afficher évaluation */
+    public function afficher_evaluation($id) {
+        $evaluation = new Evaluation;
+        $evaluation = $this->getDoctrine()->getRepository(Evaluation::class)->find($id);
+        return $this->render('/admin/afficherEvaluation.html.twig', array (
+            'evaluation' => $evaluation
+        ));
     }
 
     /* Générer une évaluation */

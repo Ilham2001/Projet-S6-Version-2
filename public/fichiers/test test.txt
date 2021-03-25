@@ -1,3 +1,0 @@
-Question vrai ou faux de réponse FAUX {F}
-
-C'est quoi la capitale de la  France ?{=Paris ~Rabat ~London ~Seoul}

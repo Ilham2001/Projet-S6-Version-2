@@ -22,13 +22,13 @@ admin_supprimer_evaluation :
     path: /supprimer_evaluation/{id}
     controller: App\Controller\AdminController::supprimer_evaluation
 
+admin_afficher_evaluation :
+    path : /afficher_evaluation/{id}
+    controller: App\Controller\AdminController::afficher_evaluation
+
 admin_generer_fichier:
     path: /generer_fichier/{id}
     controller: App\Controller\AdminController::generer_fichier
-
-admin_telecharger_fichier :
-    path: /telecharger_fichier
-    controller : App\Controller\AdminController::telecharger_fichier
 
 admin_questions :
     path: /questions
@@ -61,3 +61,23 @@ admin_modifier_user_suite :
 admin_supprimer_user :
     path: /supprimer_user/{id}
     controller: App\Controller\AdminController::supprimer_user
+
+admin_thematiques_matieres :
+    path: /thematiques_matieres
+    controller: App\Controller\AdminController::thematiques_matieres
+
+admin_thematique_Supprimer:
+    path: /Supprimer/{id}
+    controller: App\Controller\AdminController::Supprimer
+
+admin_matiere_Supprimer:
+    path: /supprimer_matiere/{id}
+    controller: App\Controller\AdminController::supprimer_matiere
+
+admin_modifier_thematique:
+    path: /modifier_thematique/{id}
+    controller: App\Controller\AdminController::modifier_thematique
+
+admin_modifier_matiere:
+    path: /modifier_matiere/{id}
+    controller: App\Controller\AdminController::modifier_matiere

@@ -18,18 +18,28 @@
             {{ form_end(filtre_question_form) }}
         </div>
 
-        <a href="" id="ajouter_evaluation">+ Nouvelle évaluation</a>
-        <a href="" id="ajouter_categorie">+ Nouvelle thématique/matière</a>
+        <a href="{{ path('user_ajouter_questions') }}" id="ajouter_evaluation">+ Nouvelle Question</a>
+        <a href="{{ path('user_ajouter_categorie') }}" id="ajouter_categorie">+ Nouvelle thématique/matière</a>
 
         <table class="tableau_de_resultats tableau_utilisateurs">
             <tr>
                 <th>Question</th>
                 <th>Propositions</th>
             </tr>
+            {% for question in questions %}
             <tr>
-                <th>question1</th>
-                <th>propo</th>
+                <th>{{ question.contenuQuestion }}</th>
+                <th>
+                    {% for proposition in question.propositionsQuestion %}
+                        {{ proposition }}
+                    {% endfor %}
+                </th>
             </tr>
+            {% else %}
+            <tr>
+                <th colspan="4"><center>Aucun résultat</center></th>
+            </tr>
+            {% endfor %}
         </table>
     </div>
 {% endblock %}

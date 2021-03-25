@@ -1,0 +1,56 @@
+{% extends 'layouts/userLayout.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2 class="titre">Thematiques et Matières</h2>
+        
+        <a href="{{ path('user_ajouter_questions') }}" id="ajouter_question">+ Nouvelle question</a>
+      
+        <a href="{{ path('user_ajouter_categorie') }}" id="ajouter_categorie">+ Nouvelle thématique/matière</a>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br><h3> <center>La liste des thématiques </center></h3>
+
+        <table class="tableau_de_resultats tableau_utilisateurs">
+             <thead>
+            <tr>
+                <th>Thematiques</th>
+            </tr>
+        </thead>
+        <tbody>  
+  
+             {% for Thematique in thematiques %}           
+            <tr>
+                <td>{{ Thematique.libelleThematique }}</td>    
+             {% endfor %}  
+            </tr>              
+        </tbody>
+        </table>
+        <br>
+        <br>
+        <br>
+        <br> <h3><center> La liste des matières </center></h3>
+
+ <table class="tableau_de_resultats tableau_utilisateurs">
+             <thead>
+            <tr>
+                <th>Matières</th>
+            </tr>
+        </thead>
+        <tbody>  
+            {% for Matiere in matieres %} 
+            <tr>
+                <td>{{ Matiere.libelleMatiere }}</td> 
+            {% endfor %}  
+            </tr>              
+        </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+</script>
+{% endblock %}

@@ -1,30 +1,27 @@
-{% extends 'layouts/adminLayout.html.twig' %}
+{% extends 'layouts/userLayout.html.twig' %}
 
 {% block body %}
     <div>
         <h2 class="titre">Historique des évaluations</h2>
-        <a href="{{ path('admin_generer_evaluation') }}" id="ajouter_evaluation">+ Nouvelle évaluation</a>
+        <a href="{{ path('user_generer_evaluation') }}" id="ajouter_evaluation">+ Nouvelle évaluation</a>
 
         <table class="tableau_de_resultats tableau_utilisateurs">
             <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Date de création</th>
-                    <th>Utilisateur</th>
                     <th>Action</th>
                 </tr>
             </head>
             <tbody>
-            {% if is_granted('ROLE_ADMIN') %}
                 {% for evaluation in evaluations %}
                 <tr>
                     <th> {{ evaluation.nomEvaluation }} </th>
                     <th> {{ evaluation.dateEvaluation ? evaluation.dateEvaluation|date('m/d/Y') }} </th>
-                    <th> {{ evaluation.user.login }} </th>
                     <th>
-                        <a id="button_modifier" class="button_admin" href="{{ path('admin_afficher_evaluation', {'id' : evaluation.id }) }}">Consulter</a>
-                        <a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a>
-                        <a href="{{ path('admin_supprimer_evaluation', {'id' : evaluation.id }) }}" id="button_supprimer" 
+                        <a id="button_modifier" class="button_admin" href="{{ path('user_afficher_evaluation', {'id' : evaluation.id }) }}">Consulter</a>
+                        <a href="{{ path('user_generer_fichier', {'id' : evaluation.id }) }}" id="button_generer" class="button_admin" onclick="">Générer</a>
+                        <a href="{{ path('user_supprimer_evaluation', {'id' : evaluation.id }) }}" id="button_supprimer" 
                             class="button_admin" onclick="return confirm('Voulez-vous supprimer cette evaluation ?')">Supprimer</a>
                     </th>
                 </tr>
@@ -33,7 +30,6 @@
                     <th colspan="4"><center>Aucun résultat</center></th>
                 </tr>
                 {% endfor %}
-            {% endif %}
             </tbody>
         </table>
     </div>

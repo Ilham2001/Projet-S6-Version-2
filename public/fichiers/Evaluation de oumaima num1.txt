@@ -1,5 +1,7 @@
+Question vrai ou faux de réponse vrai {T}
+
 Question vrai ou faux de réponse FAUX {F}
 
 C'est quoi la capitale de la  France ?{=Paris ~Rabat ~London ~Seoul}
 
-Écrivez en 10 lignes votre biographie. {}
+En quelle année est né Wolfgang Amadeus Mozart ? {#1756}

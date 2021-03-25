@@ -1,0 +1,34 @@
+{% extends 'layouts/userLayout.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2 class="titre">Choix des questions</h2>
+        <form method="POST" action="{{path('user_generer_evaluation_suite')}}">
+        <input type="text" name="nom_evaluation"/>
+        <table class="tableau_de_resultats tableau_utilisateurs">
+        
+            <tr>
+                <th>Selection</th>
+                <th>Question</th>
+                <th>Propositions</th>
+            </tr>
+                {% for question in questions %}
+                <tr>
+                    <th><input type="checkbox" name="checkBox[]"  id="ic" value="{{ question.id }}" /></th>
+                    <th>{{ question.contenuQuestion }}</th>
+                    <th>
+                        {% for proposition in question.propositionsQuestion %}
+                            {{ proposition }}
+                        {% endfor %}
+                    </th>
+                </tr>
+                {% else %}
+                <tr>
+                    <th colspan="4"><center>Aucun résultat</center></th>
+                </tr>
+                {% endfor %}
+                <button type="submit">Générer</button>
+            </form>
+        </table>
+    <div>
+{% endblock %}

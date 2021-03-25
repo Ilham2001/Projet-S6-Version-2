@@ -1,4 +1,4 @@
-{% extends 'layouts/adminLayout.html.twig' %}
+{% extends 'layouts/userLayout.html.twig' %}
 
 {% block body %}
     <p> 
@@ -21,7 +21,7 @@
              
         <h3> <center> Choisissez ce que vous voulez ajouter </center></h3>
 
-        <form method="post" action="{{ path('admin_ajouter_categorie')}}" >
+        <form method="post" action="{{ path('user_ajouter_categorie')}}" >
             <div>
             <label>Thematique</label>
             <input type="radio" id="thema" onclick="fct1()" name="choix" value="thema">
@@ -48,10 +48,8 @@
               
             </div>
             <div class="">
-            
             </div>
             <input class="button_ajouter" type="submit" value="Ajouter" onclick="return confirm('Bien ajouté !')"></input>
-            
           </form>
         </div>
     </div>

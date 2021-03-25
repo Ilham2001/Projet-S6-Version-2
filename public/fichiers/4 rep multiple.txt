@@ -1,7 +1,0 @@
-Quelle est a réponse à cette question à choix multiples ? {
-~%25%Bonne réponse1
-~%25%Bonne réponse2
-~%25%Bonne réponse3
-~%25%Bonne réponse4
-~%0%Mauvaise réponse
-}

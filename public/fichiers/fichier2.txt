@@ -1,6 +1,0 @@
-Question vrai ou faux de réponse vrai.{T}
-Question vrai ou faux de réponse FAUX.{F}
-Question vrai ou faux de réponse vrai.{T}
-Question vrai ou faux de réponse vrai.{T}
-Question vrai ou faux de réponse vrai.{T}
-Question vrai ou faux de réponse FAUX.{F}
