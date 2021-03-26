@@ -363,8 +363,29 @@ class AdminController extends AbstractController
     public function generer_evaluation(Request $request) {
 
         $questions = $this->getDoctrine()->getRepository(Question::class)->findAll();
+        $types_question = $this->getDoctrine()->getRepository(TypeQuestion::class)->findAll();
+        $thematiques_question = $this->getDoctrine()->getRepository(Thematique::class)->findAll();
+        $matieres_question = $this->getDoctrine()->getRepository(Matiere::class)->findAll();
+
+        if( isset($_POST['type_question']) || isset($_POST['matiere_question']) || isset($_POST['thematique_question']) ) {
+            
+            $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find($_POST['type_question']);
+            $matiere = $this->getDoctrine()->getRepository(Matiere::class)->find($_POST['matiere_question']);
+            $thematique = $this->getDoctrine()->getRepository(Thematique::class)->find($_POST['thematique_question']);
+            $questions = $this->getDoctrine()->getRepository(Question::class)->findByTypeOrThematiqueOrMatiere($type,$thematique,$matiere);
+            return $this->render('/admin/genererEvaluation.html.twig', array(
+                'questions' => $questions,
+                'types_question' => $types_question,
+                'thematiques_question' => $thematiques_question,
+                'matieres_question' => $matieres_question
+            ));
+        }
         return $this->render('/admin/genererEvaluation.html.twig', array(
-            'questions' => $questions));
+            'questions' => $questions,
+            'types_question' => $types_question,
+            'thematiques_question' => $thematiques_question,
+            'matieres_question' => $matieres_question
+        ));
     }
     
     /* Suite de la génération (création des fichiers) */

@@ -3,6 +3,46 @@
 {% block body %}
     <div>
         <h2 class="titre">Choix des questions</h2>
+            <div class="zone_filtre">
+                <form method="POST" action="{{path('user_generer_evaluation')}}">
+                    <ul>
+                        <li>
+                        <!-- Types -->
+                            <label for="pet-select">Type de question :</label>
+                            <select name="type_question">
+                                <option value="">--Type--</option>
+                                    {% for type in types_question %}
+                                        <option  value={{type.getId}}>{{type.getLibelleType}}</option>
+                                    {% endfor %}   
+                            </select>
+                        </li>
+                        <li>
+                        <!-- Matières -->
+                            <label for="pet-select">Matière :</label>
+                            <select name="matiere_question">
+                                <option value="">--Matière--</option>
+                                    {% for matiere in matieres_question %}
+                                        <option  value={{matiere.getId}}>{{matiere.getLibelleMatiere}}</option>
+                                    {% endfor %}   
+                            </select>
+                        </li>
+                        <li>
+                        <!-- Thématiques -->
+                            <label for="pet-select">Thématique :</label>
+                            <select name="thematique_question">
+                                <option value="">--Thématique--</option>
+                                    {% for thematique in thematiques_question %}
+                                        <option  value={{thematique.getId}}>{{thematique.getLibelleThematique}}</option>
+                                    {% endfor %}   
+                            </select>
+                        </li>
+                        <li>
+                            <button type="submit">Rechercher</button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+
         <form method="POST" action="{{path('user_generer_evaluation_suite')}}">
         <input type="text" name="nom_evaluation"/>
         <table class="tableau_de_resultats tableau_utilisateurs">

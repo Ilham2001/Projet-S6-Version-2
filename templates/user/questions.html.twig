@@ -5,20 +5,48 @@
         <h2 class="titre">Questions</h2>
         
         <div>
-            {{ form_start(filtre_question_form) }}
-            <div class="">
-                {{ form_errors(filtre_question_form) }}
-            </div>
             <div class="zone_filtre">
-                <div class="input">{{ form_row(filtre_question_form.question) }}</div>
-                <div class="input">{{ form_row(filtre_question_form.type) }}</div>
-                <div class="input">{{ form_row(filtre_question_form.thematique) }}</div>
-                <div class="input">{{ form_row(filtre_question_form.matiere) }}</div>
+                <form method="POST" action="{{path('user_questions')}}">
+                    <ul>
+                        <li>
+                        <!-- Types -->
+                            <label for="pet-select">Type de question :</label>
+                            <select name="type_question">
+                                <option value="">--Type--</option>
+                                    {% for type in types_question %}
+                                        <option  value={{type.getId}}>{{type.getLibelleType}}</option>
+                                    {% endfor %}   
+                            </select>
+                        </li>
+                        <li>
+                        <!-- Matières -->
+                            <label for="pet-select">Matière :</label>
+                            <select name="matiere_question">
+                                <option value="">--Matière--</option>
+                                    {% for matiere in matieres_question %}
+                                        <option  value={{matiere.getId}}>{{matiere.getLibelleMatiere}}</option>
+                                    {% endfor %}   
+                            </select>
+                        </li>
+                        <li>
+                        <!-- Thématiques -->
+                            <label for="pet-select">Thématique :</label>
+                            <select name="thematique_question">
+                                <option value="">--Thématique--</option>
+                                    {% for thematique in thematiques_question %}
+                                        <option  value={{thematique.getId}}>{{thematique.getLibelleThematique}}</option>
+                                    {% endfor %}   
+                            </select>
+                        </li>
+                        <li>
+                            <button type="submit">Rechercher</button>
+                        </li>
+                    </ul>
+                </form>
             </div>
-            {{ form_end(filtre_question_form) }}
         </div>
 
-        <a href="{{ path('user_ajouter_questions') }}" id="ajouter_evaluation">+ Nouvelle Question</a>
+        <a href="{{ path('user_ajouter_questions') }}" id="ajouter_question">+ Nouvelle question</a>
         <a href="{{ path('user_ajouter_categorie') }}" id="ajouter_categorie">+ Nouvelle thématique/matière</a>
 
         <table class="tableau_de_resultats tableau_utilisateurs">
@@ -34,6 +62,7 @@
                         {{ proposition }}
                     {% endfor %}
                 </th>
+                
             </tr>
             {% else %}
             <tr>
