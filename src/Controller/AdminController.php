@@ -134,20 +134,32 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_users');
     }
     public function questions_list(Request $request) {
-        $filtre_question_form = $this->createFormBuilder(null)
-            ->add('question',TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Rechercher une question...')))
-            ->add('type',ChoiceType::class , array('label' => false, 'choices' => [ 'QCM' => null, 'Frai ou faux' => null, 'Item3' => null]))
-            ->add('thematique',ChoiceType::class,array('label' => false, 'choices' => [ 'UML' => null, 'Item2' => null, 'Item3' => null]))
-            ->add('matiere',ChoiceType::class,array('label' => false, 'choices' => [ 'Item1' => null, 'Item2' => null, 'Item3' => null]))
-            ->getForm();
-        $filtre_question_form->handleRequest($request);
-        if($filtre_question_form->isSubmitted() && $filtre_question_form->isValid()) {
-            dd("filtre quesiton");
-        }
+
         $questions = $this->getDoctrine()->getRepository(Question::class)->findAll();
+        $types_question = $this->getDoctrine()->getRepository(TypeQuestion::class)->findAll();
+        $thematiques_question = $this->getDoctrine()->getRepository(Thematique::class)->findAll();
+        $matieres_question = $this->getDoctrine()->getRepository(Matiere::class)->findAll();
+
+        if( isset($_POST['type_question']) || isset($_POST['matiere_question']) || isset($_POST['thematique_question']) ) {
+            $type = $this->getDoctrine()->getRepository(TypeQuestion::class)->find($_POST['type_question']);
+            $matiere = $this->getDoctrine()->getRepository(Matiere::class)->find($_POST['matiere_question']);
+            $thematique = $this->getDoctrine()->getRepository(Thematique::class)->find($_POST['thematique_question']);
+            $questions = $this->getDoctrine()->getRepository(Question::class)->findByTypeOrThematiqueOrMatiere($type,$thematique,$matiere);
+            return $this->render('/admin/questions.html.twig', array(
+                'questions' => $questions,
+                'types_question' => $types_question,
+                'thematiques_question' => $thematiques_question,
+                'matieres_question' => $matieres_question
+            ));
+        }
+
+
         return $this->render('/admin/questions.html.twig', array(
-            'filtre_question_form' => $filtre_question_form->createView(),
-            'questions' => $questions));
+            'questions' => $questions,
+            'types_question' => $types_question,
+            'thematiques_question' => $thematiques_question,
+            'matieres_question' => $matieres_question
+        ));
     }
 
     public function ajouter_question(Request $request)

@@ -154,13 +154,14 @@ th, td{
     background-color: #cccccc;
 }
 .zone_filtre {
-    width: 85%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 .zone_filtre li {
-    width: 400px;
-    padding: 5px;
+    width: 250px;
+    padding: 2px;
+    margin: 10px;
     display: inline-block;
 }
 input {

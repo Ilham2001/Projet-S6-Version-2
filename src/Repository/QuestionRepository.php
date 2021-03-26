@@ -22,19 +22,21 @@ class QuestionRepository extends ServiceEntityRepository
     // /**
     //  * @return Question[] Returns an array of Question objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findByTypeOrThematiqueOrMatiere($type,$thematique,$matiere)
     {
         return $this->createQueryBuilder('q')
-            ->andWhere('q.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('q.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('q.typeQuestion = :type')
+            ->setParameter('type', $type)
+            ->orWhere('q.thematiqueQuestion = :thematique')
+            ->setParameter('thematique', $thematique)
+            ->orWhere('q.matiereQuestion = :matiere')
+            ->setParameter('matiere', $matiere)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Question
