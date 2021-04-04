@@ -1,10 +1,10 @@
 {% extends 'layouts/userLayout.html.twig' %}
-
+{% block title %}Créer une évaluation {% endblock %}
 {% block body %}
     <div>
         <h2 class="titre">Choix des questions</h2>
             <div class="zone_filtre">
-                <form method="POST" action="{{path('user_generer_evaluation')}}">
+                <center><form method="POST" action="{{path('user_generer_evaluation')}}">
                     <ul>
                         <li>
                         <!-- Types -->
@@ -37,21 +37,23 @@
                             </select>
                         </li>
                         <li>
-                            <button type="submit">Rechercher</button>
+                            <button class="button_admin" style="padding:9px;width:120px;" type="submit">Rechercher</button>
                         </li>
                     </ul>
-                </form>
+                </form></center>
             </div>
-
         <form method="POST" action="{{path('user_generer_evaluation_suite')}}">
-        <input type="text" name="nom_evaluation"/>
-        <table class="tableau_de_resultats tableau_utilisateurs">
-        
-            <tr>
-                <th>Selection</th>
-                <th>Question</th>
-                <th>Propositions</th>
-            </tr>
+            <center>
+                <label>Veuillez saisir un nom pour votre évaluation : </label>
+                <input id="input_nom" type="text" name="nom_evaluation" placeholder="Nom de l'évaluation" required/>
+            </center>
+            
+            <table class="tableau_de_resultats tableau_utilisateurs">
+                <tr>
+                    <th>Selection</th>
+                    <th>Question</th>
+                    <th>Propositions</th>
+                </tr>
                 {% for question in questions %}
                 <tr>
                     <th><input type="checkbox" name="checkBox[]"  id="ic" value="{{ question.id }}" /></th>
@@ -67,8 +69,9 @@
                     <th colspan="4"><center>Aucun résultat</center></th>
                 </tr>
                 {% endfor %}
-                <button type="submit">Générer</button>
-            </form>
-        </table>
+                
+            </table>
+            <button class="button_admin generer_eval" id="button_generer" type="submit">Générer</button>
+        </form>
     <div>
 {% endblock %}

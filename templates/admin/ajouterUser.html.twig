@@ -1,8 +1,8 @@
 {% extends 'layouts/adminLayout.html.twig' %}
-
+{% block title %}Nouvel utilisateur{% endblock %}
 {% block body %}
     <h2 class="titre">Nouvel utilisateur</h2>
-    <div class="box">
+    <div class="box_user">
         <div class="box_ajout">
             {{ form_start(ajouter_user_form) }}
             <div class="">
@@ -13,7 +13,7 @@
                 <div class="input">{{ form_row(ajouter_user_form.login) }}</div>
                 <div class="input">{{ form_row(ajouter_user_form.roles) }}</div>
                 <div class="input">{{ form_row(ajouter_user_form.password) }}</div>
-                <a href="{{ path('admin_ajouter_user') }}" class="button_ajouter">{{ form_row(ajouter_user_form.ajouter) }}</a>
+                <center><a href="{{ path('admin_ajouter_user') }}">{{ form_row(ajouter_user_form.Enregistrer) }}</a></center>
             </div>
             {{ form_end(ajouter_user_form) }}
         </div>

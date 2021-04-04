@@ -18,7 +18,6 @@ user_supprimer_evaluation :
     path: /supprimer_evaluation/{id}
     controller: App\Controller\AdminController::supprimer_evaluation
 
-    
 user_afficher_evaluation :
     path : /afficher_evaluation/{id}
     controller: App\Controller\UserController::afficher_evaluation

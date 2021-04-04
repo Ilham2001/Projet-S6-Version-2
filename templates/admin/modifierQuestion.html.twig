@@ -1,0 +1,204 @@
+{% extends 'layouts/adminLayout.html.twig' %}
+{% block title %}Modifier une question{% endblock %}
+{% block body %}
+
+    <h2 class="titre">Modifier question</h2>
+    <div class="box">
+        <div class="box_ajout">
+           <form method="post" action="{{ path('admin_modifier_question_suite', {'id' : question.id }) }}" >
+
+            <div id="question" style="display:block;">
+                    <label>Veuillez saisir votre question :</label>
+                    <input "input_ajout" type="text" name="question" value="{{ question.contenuQuestion }}"/>
+            </div>
+
+            <label for="pet-select">Type de question :</label>
+
+                <select name="Type" id="type_select" onchange="fct3()">
+                    <option value={{ question.typeQuestion.getId }}>{{ question.typeQuestion.getLibelleType }}</option>
+                    {% for MT in em2 %}
+                        {% if MT.getId != question.typeQuestion.getId %}
+                            <option  value={{MT.getId}}>{{MT.getLibelleType}}</option>
+                        {% endif %}
+                    {% endfor %}   
+                </select>
+            <br>
+            <br>
+            <br>
+                        <div id="container"> 
+                            <div id="ici">
+                            <!-- Si le type de la question est vrai ou faux -->
+                            {% if question.typeQuestion.getId == 1 %}
+                                <div id="vf" style="display:none;" >
+                                    <label>Veuillez saisir la reponse correcte :</label>
+                                    {% for proposition in question.propositionsQuestion %}
+                                        
+                                        {% if proposition == question.reponsesQuestion[0] %}
+                                            <label for={{ proposition }}>{{ proposition }}</label>  
+                                            <input "input_ajout" id="vrai" type="radio" name="VF" value={{ proposition }} checked/>
+                                        {% elseif proposition != question.reponsesQuestion[0]%}
+                                    
+                                            <label for={{ proposition }}>{{ proposition }}</label>  
+                                            <input "input_ajout" id="vrai" type="radio" name="VF" value={{ proposition }} />
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            
+                            <!-- Si le type de la question est libre -->
+                            {% elseif question.typeQuestion.getId == 2 %}
+                                <div id="libre" style="display:none;">
+                                    <label>Veuillez saisir un exemple de réponse correcte :</label>
+                                    <input type="text" name="Libre" value = "{{ question.reponsesQuestion[0] }}"/>
+                                </div>
+                                <!-- Si le type de la question est numérique -->
+                            {% elseif question.typeQuestion.getId == 5 %}
+                                 <div id="numerique" style="display:none;">
+                                    <label>Veuillez saisir la réponse correcte :</label>
+                                    <input "input_ajout" type="number" name="Numerique" value = "{{ question.reponsesQuestion[0] }}"/>
+                                </div>
+                            <!-- Si le type de la question est multiple -->
+                            {% elseif question.typeQuestion.getId == 4 %}
+                                <div id="qcm" style="display:none;">
+                                    <div class="qcm_zone">
+                                    {% set value =  0 %}
+                                        {% for proposition in question.propositionsQuestion %}
+                                            {% if proposition in question.reponsesQuestion %}
+                                                <input "input_ajout" type="checkbox" id="{{ value }}" name="ChoixMultiple[]" value="{{ value }}" checked/>
+                                                <input "input_ajout" for="0" type="text" name="choixx{{ value }}" value="{{ proposition }}"/><br>
+                                            {% elseif proposition not in question.reponsesQuestion %}
+                                                <input "input_ajout" type="checkbox" id="{{ value }}" name="ChoixMultiple[]" value="{{ value }}"/>
+                                                <input "input_ajout" for="0" type="text" name="choixx{{ value }}" value="{{ proposition }}"/><br>
+                                            {% endif %}
+                                            {% set value = value + 1 %}
+                                        {% endfor %}
+
+                                        <input id="val"  type="hidden" name="value" value={{ value }} />
+                                    </div>
+                                </div>
+                                <!-- Si le type de la question est unique -->
+                                {% elseif question.typeQuestion.getId == 3 %}
+
+                                <div  class="qcu_zone" id="qcu" style="display:none;">
+                                 {% set value =  1 %}
+                                        {% for proposition in question.propositionsQuestion %}
+                                            {% if proposition in question.reponsesQuestion %}
+                                                <input "input_ajout" type="radio" id="{{ value }}" name="UNIQUE" value="{{ value }}" checked/>
+                                                <input "input_ajout" for="{{ proposition }}" type="text" name="choix{{ value }}" value="{{ proposition }}"/><br>
+                                            {% elseif proposition not in question.reponsesQuestion %}
+                                                <input "input_ajout" type="radio" id="{{ value }}" name="UNIQUE" value="{{ value }}"/>
+                                                <input "input_ajout" for="{{ proposition }}" type="text" name="choix{{ value }}" value="{{ proposition }}"/><br>
+                                            {% endif %}
+                                            {% set value = value + 1 %}
+                                        {% endfor %}
+                                    
+                                </div>
+                                {% endif %}
+
+                            </div> 
+                        </div>
+            <br>
+        
+            <label for="pet-select">Choisir une matiére:</label>
+                {% if question.matiereQuestion is empty %}
+                <select name="matiere" id="pet-select">
+                        <option value="">--Matiere--</option>
+                        {% for MT in em %}
+                            <option value={{MT.getId}}>{{MT.getLibelleMatiere}}</option>
+                        {% endfor %}
+                </select>
+                {% else %}
+                <select name="matiere" id="pet-select">
+                        <option value={{ question.matiereQuestion.getId }}>{{ question.matiereQuestion.getLibelleMatiere }}</option>
+                        {% for MT in em %}
+                            {% if MT.getId != question.matiereQuestion.getId %}
+                                <option value={{MT.getId}}>{{MT.getLibelleMatiere}}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                </select>
+                {% endif %}
+            <br>
+            <br>
+            <br>
+
+            <label for="pet-select">Choisir une thématique:</label>
+                {% if question.thematiqueQuestion is empty %}
+                <select name="thematique" id="pet-select">
+                        <option value="">--Thématique--</option>
+                        {% for MT in em1 %}
+                            <option value={{MT.getId}}>{{MT.getLibelleThematique}}</option>
+                        {% endfor %}
+                </select>
+                {% else %}
+                <select name="thematique" id="pet-select">
+                        <option value={{ question.thematiqueQuestion.getId }}>{{ question.thematiqueQuestion.getLibelleThematique }}</option>
+                        {% for MT in em1 %}
+                            {% if MT.getId != question.thematiqueQuestion.getId %}
+                                <option value={{MT.getId}}>{{MT.getLibelleThematique}}</option>
+                            {% endif %}
+                        {% endfor %}
+                </select>
+                {% endif %}
+
+            <br>
+            <br>
+                <input type="submit" value="Modifier"/>
+          </form>
+          
+        </div>
+    </div>
+
+<script type="text/javascript">
+ 
+$(document).ready(function() {
+var count = 3;
+  $("#update").click(function() {
+    var xs=count++;
+   
+$("<input type='checkbox' id="+xs+" name='ChoixMultiple[]' value="+xs+"><input for="+xs+" type='text' name='choixx"+xs+"'/><br>").appendTo(".appand"); })
+//$("#up").click(function() {
+    //var xss=count++;
+   
+//$("<input id="+xss" type='radio name='UNIQUE' value="+xss+"><input for="+xss+" type='text' name='choix'/><br>").appendTo(".appand"); })
+});
+function fct3() {
+  var x = document.getElementById("type_select").value;
+  //document.getElementById("demo").innerHTML = x;
+        if (x == 1){
+            $("#vf").css({"display": "block"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "none"});
+            } 
+        if (x == 2){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "block"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "none"});
+        } 
+        if (x == 3){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "block"});
+        } 
+        if (x == 5){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "block"});
+            $("#qcu").css({"display": "none"});
+        } 
+        if (x == 4){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "block"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "none"});
+        } 
+}
+</script>
+{% endblock %}

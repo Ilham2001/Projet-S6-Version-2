@@ -1,5 +1,5 @@
 {% extends 'layouts/adminLayout.html.twig' %}
-
+{% block title %}Utilisateurs{% endblock %}
 {% block body %}
     <div>
         <h2 class="titre">Utilisateurs</h2>
@@ -8,11 +8,12 @@
             <div class="">
                 {{ form_errors(login_form) }}
             </div>
-            <div class="zone_filtre">
+            <center><div class="zone_filtre">
                 <ul>
                     <li><div class="input">{{ form_row(login_form.rechercheData) }}</div></li>
                     <li><div class="input">{{ form_row(login_form.rechercher) }}</div></li>
-            </div>
+                </ul>
+            </div></center>
             {{ form_end(login_form) }}
         </div>
         <a href="{{ path('admin_ajouter_user') }}" id="ajouter_utilisateur">+ Ajouter un utilisateur</a>

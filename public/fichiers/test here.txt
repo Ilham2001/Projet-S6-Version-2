@@ -1,0 +1,8 @@
+En quelle année est né Wolfgang Amadeus Mozart ? {#1756}
+
+Quelle est a réponse à cette question à choix multiples ? {
+~%33.33333%Bonne réponse1
+~%33.33333%Bonne réponse2
+~%33.33333%Bonne réponse3
+~%0%Mauvaise réponse
+}

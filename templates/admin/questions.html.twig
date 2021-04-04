@@ -1,11 +1,11 @@
 {% extends 'layouts/adminLayout.html.twig' %}
-
+{% block title %}Questions{% endblock %}
 {% block body %}
     <div>
         <h2 class="titre">Questions</h2>
         
         <div>
-            <div class="zone_filtre">
+            <center><div class="zone_filtre">
                 <form method="POST" action="{{path('admin_questions')}}">
                     <ul>
                         <li>
@@ -39,11 +39,11 @@
                             </select>
                         </li>
                         <li>
-                            <button type="submit">Rechercher</button>
+                            <button class="button_admin" style="padding:9px;width:120px;" type="submit">Rechercher</button>
                         </li>
                     </ul>
                 </form>
-            </div>
+            </div></center>
         </div>
 
         <a href="{{ path('admin_ajouter_questions') }}" id="ajouter_question">+ Nouvelle question</a>
@@ -53,6 +53,7 @@
             <tr>
                 <th>Question</th>
                 <th>Propositions</th>
+                <th>Réponses</th>
                 <th>Modification</th>
                 <th>Suppression</th>
             </tr>
@@ -61,10 +62,15 @@
                 <th>{{ question.contenuQuestion }}</th>
                 <th>
                     {% for proposition in question.propositionsQuestion %}
-                        {{ proposition }}
+                        <div id="proposition"><i id="propo_icon" class="fas fa-chevron-circle-right"></i>{{ proposition }}</div>
                     {% endfor %}
                 </th>
-                <th><a id="button_modifier" class="button_admin" href="">Modifier</a></th>
+                <th>
+                    {% for reponse in question.reponsesQuestion %}
+                        <div id="proposition"><i id="propo_icon" class="fas fa-chevron-circle-right"></i>{{ reponse }}</div>
+                    {% endfor %}
+                </th>
+                <th><a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_question', {'id' : question.id }) }}">Modifier</a></th>
                 <th><a href="{{ path('admin_supprimer_question', {'id' : question.id }) }}" id="button_supprimer" 
                     class="button_admin" onclick="return confirm('Voulez-vous supprimer cette question ?')">Supprimer</a></th>
             </tr>

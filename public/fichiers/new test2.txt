@@ -1,0 +1,11 @@
+Écrivez en 10 lignes votre biographie. {}
+
+question choix unique {=10 ~1000 ~100000000}
+
+question qcuuuuu {=20 ~10 ~30}
+
+Écrivez en 10 lignes votre biographie. {}
+
+question choix unique {=10 ~1000 ~100000000}
+
+question qcuuuuu {=20 ~10 ~30}

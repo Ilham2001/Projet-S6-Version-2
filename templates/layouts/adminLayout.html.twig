@@ -2,8 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title id="title">{% block title %} {% endblock %}</title>
         {% block stylesheets %}
+            
             <link rel="stylesheet" href="/css/style.css">
         {% endblock %}
 
@@ -12,8 +13,11 @@
             <script type="text/javascript" src="/js/modalScript.js"></script>
             <script type="text/javascript" src="/js/formCategorieScript.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+            
         {% endblock %}
     </head>
+
     <body>
         <header>
             <a href="{{ path('admin_index') }}" id="titre_page"></i>Accueil</a>
@@ -27,6 +31,11 @@
                 </ul>
             </nav>
         </header>
+            {% for message in app.flashes('message') %}
+                <div class="alert alert-success">
+                    <center>{{ message }}</center>
+                </div>
+             {% endfor %}
         {% block body %}{% endblock %}
     </body>
 </html>

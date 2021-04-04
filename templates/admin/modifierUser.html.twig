@@ -1,8 +1,8 @@
 {% extends 'layouts/adminLayout.html.twig' %}
-
+{% block title %}Modifier un utilisateur{% endblock %}
 {% block body %}
     <h2 class="titre">Modifier enseignant</h2>
-    <div class="box">
+    <div class="box_user">
         <div class="box_ajout">
             {{ form_start(modifier_user_form) }}
             <div class="">
@@ -11,8 +11,9 @@
             <div class="zone_input">
                 <center><i id="icon_ajout" class="fas fa-user"></i></center>
                 <div class="input">{{ form_row(modifier_user_form.login) }}</div>
+                <div class="input">{{ form_row(modifier_user_form.roles) }}</div>
                 <div class="input">{{ form_row(modifier_user_form.password) }}</div>
-                <a href="" class="button_ajouter">{{ form_row(modifier_user_form.ajouter) }}</a>
+                <a href="" class="button_ajouter">{{ form_row(modifier_user_form.Enregistrer) }}</a>
             </div>
             {{ form_end(modifier_user_form) }}
         </div>

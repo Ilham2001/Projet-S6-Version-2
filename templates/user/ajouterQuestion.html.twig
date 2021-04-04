@@ -1,24 +1,152 @@
 {% extends 'layouts/userLayout.html.twig' %}
-
+{% block title %}Ajouter une question{% endblock %}
 {% block body %}
+
     <h2 class="titre">Nouvelle Question</h2>
     <div class="box">
         <div class="box_ajout">
-            {{ form_start(ajouter_question_form) }}
-            <div class="">
-                {{ form_errors(ajouter_question_form) }}
-            </div>
-            <div class="zone_input">
-                    <div class="input">{{ form_row(ajouter_question_form.question) }}</div>
-                    <div class="input">{{ form_row(ajouter_question_form.type) }}</div>
-                    <div class="input">{{ form_row(ajouter_question_form.propositions) }}</div>
-                    <div class="">{{ form_row(ajouter_question_form.autre_proposition) }}</div>
-                    <div class="">{{ form_row(ajouter_question_form.thematique) }}</div>
-                    <div class="">{{ form_row(ajouter_question_form.matiere) }}</div>
-                    <div class="">{{ form_row(ajouter_question_form.autre_question) }}</div><br>
-                    <div class="ajouter_question_btn">{{ form_row(ajouter_question_form.ajouter) }}</div>
-            </div>
-            {{ form_end(ajouter_question_form) }}
+            <form method="POST" action="{{ path('user_ajouter_questions') }}">
+
+                <div id="question" style="display:block;">
+                        <label>Veuillez saisir votre question : </label>
+                        <input class="input_ajout" type="text" name="question" required/>
+                </div>
+
+                <label for="pet-select">Type de question :</label>
+
+                <select name="Type" id="type_select" onchange="fct3()">
+                    <option value="">--Type--</option>
+                    {% for MT in em2 %}
+                        <option  value={{MT.getId}}>{{MT.getLibelleType}}</option>
+                    {% endfor %}   
+                </select>
+                <br/><br/>
+                            <div id="container">
+                                <div id="vf" style="display:none;">
+                                    <label>Veuillez saisir la reponse correcte : </label>
+                                    <div>
+                                        <input style="width: 10%;" id="vrai" type="radio" name="VF" value="Vrai"/>
+                                        <label for="vrai">Vrai</label>                               
+                                        <input style="width: 10%;" id="faux" type="radio" name="VF" value="Faux"/>
+                                        <label for="faux">Faux</label>
+                                    </div>
+                                </div>
+
+                                <div id="libre" style="display:none;">
+                                    <label>Veuillez saisir un exemple de réponse correcte : </label>
+                                    <input class="input_ajout" type="text" name="Libre"/>
+                                </div>
+
+                                 <div id="numerique" style="display:none;">
+                                    <label>Veuillez saisir la réponse correcte :</label>
+                                    <input class="input_ajout" type="number" name="Numerique"/>
+                                </div>
+
+                                <div id="qcm" style="display:none;">
+                                    <div class="qcm_zone">
+                                        <input class="input_ajout" type="checkbox" id="0" name="ChoixMultiple[]" value="0">
+                                        <input class="input_ajout" for="0" type="text" name="choixx0"/><br>
+
+                                        <input class="input_ajout" type="checkbox" id="1" name="ChoixMultiple[]" value="1">
+                                        <input class="input_ajout" for="1" type="text" name="choixx1"/><br>
+                                        
+                                        <input class="input_ajout" type="checkbox" id="2" name="ChoixMultiple[]" value="2">
+                                        <input class="input_ajout" for="2" type="text" name="choixx2"/><br>
+
+                                        <input id="val"  type="hidden" name="value" value="2" />
+                                    </div>
+                                    <div class="button_plus"><a style="background-color:#ec7357;width:10000px;height:150px;" class="button_plus" id="update" >+</a></div>
+                                </div>
+                            
+                                <div class="qcu_zone" id="qcu" style="display:none;">
+
+                                    <input class="input_ajout" id="1" type="radio" name="UNIQUE" value="1">
+                                    <input class="input_ajout" for="1" type="text" name="choix1"/><br>                               
+                                    <input class="input_ajout" id="2" type="radio" name="UNIQUE" value="2">
+                                    <input class="input_ajout" for="2" type="text" name="choix2"/><br>
+                                    <input class="input_ajout" id="3" type="radio" name="UNIQUE" value="3">
+                                    <input class="input_ajout" for="3" type="text" name="choix3"/><br>
+                                 
+                                </div>
+
+                            </div>
+                <br>
+                
+                <label for="pet-select">Choisir une matiére:</label>
+
+                <select name="matiere" id="pet-select">
+                        <option value="">--Matiere--</option>
+                        {% for MT in em %}
+                            <option value={{MT.getId}}>{{MT.getLibelleMatiere}}</option>
+                        {% endfor %}
+                </select>
+                <br>
+                <br>
+                <br>
+                <label for="pet-select">Choisir une thématique:</label>
+
+                <select name="thematique" id="pet-select">
+                        <option value="">--Thématique--</option>
+                        {% for MT in em1 %}
+                            <option value={{MT.getId}}>{{MT.getLibelleThematique}}</option>
+                        {% endfor %}
+                </select>
+                <br><br>
+
+                <input type="submit" value="Ajouter"/>
+
+            </form>
+          
         </div>
     </div>
+
+<script type="text/javascript">
+ 
+    $(document).ready(function() {
+    var count = 3;
+    $("#update").click(function() {
+        var xs=count++;
+    $('#val').val(xs); 
+    $("<input class='input_ajout' type='checkbox' id="+xs+" name='ChoixMultiple[]' value="+xs+"><input class='input_ajout' for="+xs+" type='text' name='choixx"+xs+"'/><br>").appendTo(".qcm_zone"); });
+    });
+
+    function fct3() {
+        var x = document.getElementById("type_select").value;
+        if (x == 1){
+            $("#vf").css({"display": "block"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "none"});
+        } 
+        if (x == 2){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "block"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "none"});
+        } 
+        if (x == 3){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "block"});
+        } 
+        if (x == 5){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "none"});
+            $("#numerique").css({"display": "block"});
+            $("#qcu").css({"display": "none"});
+        } 
+        if (x == 4){
+            $("#vf").css({"display": "none"});
+            $("#libre").css({"display": "none"});
+            $("#qcm").css({"display": "block"});
+            $("#numerique").css({"display": "none"});
+            $("#qcu").css({"display": "none"});
+        } 
+    }
+</script>
 {% endblock %}

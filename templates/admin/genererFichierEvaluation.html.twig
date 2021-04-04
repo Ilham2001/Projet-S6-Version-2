@@ -1,8 +1,9 @@
 {% extends 'layouts/adminLayout.html.twig' %}
-
+{% block title %}Créer une évaluation {% endblock %}
 {% block body %}
     <div>
         <h2 class="titre">Générer une évaluation</h2>
+        <center><h3>Nom de l'évaluation : {{ evaluation.nomEvaluation }}</h3></center>
         <table class="tableau_de_resultats tableau_utilisateurs">
            
                 {% for question in evaluation.questions %}
@@ -10,7 +11,14 @@
                     <th>{{ question.contenuQuestion }}</th>
                     <th>
                         {% for proposition in question.propositionsQuestion %}
-                            {{ proposition }}
+                           <div id="proposition">
+                                <i id="propo_icon" class="fas fa-chevron-circle-right"></i>{{ proposition }}
+                            </div>
+                        {% endfor %}
+                    </th>
+                     <th>
+                        {% for reponse in question.reponsesQuestion %}
+                            <div id="proposition"><i id="propo_icon" class="fas fa-chevron-circle-right"></i>{{ reponse }}</div>
                         {% endfor %}
                     </th>
                 </tr>
@@ -19,7 +27,7 @@
                     <th colspan="2"><center>Aucun résultat</center></th>
                 </tr>
                 {% endfor %}
-                <a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}"  id="button_generer" class="button_admin">Télécharger</a>
         </table>
+        <a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}"  id="button_generer" class="button_admin generer_eval">Télécharger</a>
     <div>
 {% endblock %}

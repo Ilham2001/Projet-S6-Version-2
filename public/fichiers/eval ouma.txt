@@ -1,0 +1,40 @@
+En quelle année est né Wolfgang Amadeus Mozart ? {#1756}
+
+Quelle est a réponse à cette question à choix multiples ? {
+~%33.33333%Bonne réponse1
+~%33.33333%Bonne réponse2
+~%33.33333%Bonne réponse3
+~%0%Mauvaise réponse
+}
+
+Quelle est a réponse à cette question à choix multiples ? {
+~%25%Bonne réponse1
+~%25%Bonne réponse2
+~%25%Bonne réponse3
+~%25%Bonne réponse4
+~%0%Mauvaise réponse
+}
+
+Écrivez en 10 lignes votre biographie. {}
+
+Question vrai ou faux de réponse vrai {T}
+
+En quelle année est né Wolfgang Amadeus Mozart ? {#1756}
+
+Quelle est a réponse à cette question à choix multiples ? {
+~%33.33333%Bonne réponse1
+~%33.33333%Bonne réponse2
+~%33.33333%Bonne réponse3
+~%0%Mauvaise réponse
+}
+
+question qcuuuuu{=20 ~10 ~30}
+
+multiple dyal ouma {
+~%33.33333%hmbok
+~%33.33333%khdmi
+~%33.33333%rah 1 dyal sb7
+~%0%yaki
+}
+
+pikalty {#10}

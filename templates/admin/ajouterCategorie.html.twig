@@ -1,5 +1,5 @@
 {% extends 'layouts/adminLayout.html.twig' %}
-
+{% block title %}Nouvelle catégorie{% endblock %}
 {% block body %}
     <p> 
         {% set flash_notices = app.session.flashbag.get('Msg') %}
@@ -50,7 +50,7 @@
             <div class="">
             
             </div>
-            <input class="button_ajouter" type="submit" value="Ajouter" onclick="return confirm('Bien ajouté !')"></input>
+            <input class="button_ajouter" type="submit" value="Ajouter"></input>
             
           </form>
         </div>

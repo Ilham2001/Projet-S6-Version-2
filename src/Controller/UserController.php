@@ -64,6 +64,126 @@ class UserController extends AbstractController
         ));
     }
 
+
+
+    /* Ajouter question */
+
+    public function ajouter_question(Request $request)
+    {
+        $question = new Question;
+
+        if(isset($_POST['question']) && isset($_POST['Type']) ) {
+            $contenu_question = $_POST['question'];
+            $type_question = $_POST['Type'];
+
+            $type = $this->getDoctrine()->getManager()->getRepository(TypeQuestion::class)->find($type_question);
+           
+            $question->setContenuQuestion($contenu_question);
+            $question->setTypeQuestion($type);
+            
+            /* Récupération de la matière */
+            if(isset($_POST['matiere']) && !empty($_POST['matiere'])) {
+                $matiere = $_POST['matiere'];
+                $matiere_question = $this->getDoctrine()->getManager()->getRepository(Matiere::class)->find($matiere);
+                $question->setMatiereQuestion($matiere_question);             
+            }
+            /* Récupération de la thématique */
+            if(isset($_POST['thematique']) && !empty($_POST['thematique'])) {
+                $thematique = $_POST['thematique'];
+                $thematique_question = $this->getDoctrine()->getManager()->getRepository(Thematique::class)->find($thematique);
+                $question->setThematiqueQuestion($thematique_question);
+            }
+
+            /* Question à réponse libre */
+            if(isset($_POST['Libre']) && !empty($_POST['Libre'])) {
+                $propositions=[];
+                $reponses=array($_POST['Libre']);            
+                $question->setReponsesQuestion($reponses);
+                $question->setPropositionsQuestion($propositions);
+            }
+
+            /* Question à réponse numérique  */
+            if(isset($_POST['Numerique']) && !empty($_POST['Numerique'])) {
+                $propositions=[];
+                $reponses=array($_POST['Numerique']);            
+                $question->setReponsesQuestion($reponses);
+                $question->setPropositionsQuestion($propositions);
+            }
+
+            /* Question vrai ou faux */
+            if(isset($_POST['VF']) && !empty($_POST['VF'])) {
+        
+                $reponses=array($_POST['VF']);   
+                $propositions=["Vrai", "Faux"];            
+                $question->setReponsesQuestion($reponses);
+                $question->setPropositionsQuestion($propositions);
+            }
+
+            /* Question à choix unique */
+            if(isset($_POST['UNIQUE']) && !empty($_POST['UNIQUE'])) {
+
+                $i= $_POST['UNIQUE'];
+                
+                $choix="choix".$i;
+
+                $propositions[0] = $_POST["choix1"];
+                $propositions[1] = $_POST["choix2"];
+                $propositions[2] = $_POST["choix3"];
+               
+                $reponses=array($_POST[$choix]);   
+                $question->setReponsesQuestion($reponses);
+                $question->setPropositionsQuestion($propositions);
+            }
+            /* Question à choix multiple */
+            
+            if(isset($_POST['ChoixMultiple']) && !empty($_POST['ChoixMultiple'])) {
+                
+                $array = array();
+                $value = $_POST["value"];
+                
+                //Propositions
+                for($i=0; $i<=$value; $i++) {
+                    $choixxx=$_POST["choixx".$i];
+                    array_push($array, $choixxx);
+                    $propositions[$i] = $array[$i];
+                }
+
+                //Réponses
+                $reponses = array();
+                $x=$_POST['ChoixMultiple'];
+
+                $c=count($x);
+
+                for($i=0;$i<$c;$i++){
+                    $val=$x[$i];
+                    $choixxx=$_POST["choixx".$val];
+                    array_push($reponses, $choixxx);
+                }
+
+                $question->setReponsesQuestion($reponses);
+                $question->setPropositionsQuestion($propositions);
+
+            }
+        
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($question);
+            $entityManager->flush();
+
+            $this->addFlash('message', 'Question ajoutée avec succès');
+            return $this->redirectToRoute('user_questions');
+        }
+
+        $em=$this->getDoctrine()->getManager()->getRepository(Matiere::class)->findAll();   
+        $em1=$this->getDoctrine()->getManager()->getRepository(Thematique::class)->findAll();
+        $em2=$this->getDoctrine()->getManager()->getRepository(TypeQuestion::class)->findAll();
+           
+        return $this->render('/user/ajouterQuestion.html.twig',
+                array(  'em'=>$em,
+                'em1'=>$em1,
+                'em2'=>$em2
+        ));
+    }
+    
      /* Liste thématiques et matières */
     public function thematiques_matieres(Request $request) {
         $thematiques= new Thematique;
@@ -96,15 +216,20 @@ class UserController extends AbstractController
             $thematique->setLibelleThematique($Thematiqu);
             $em->persist($thematique);
             $em->flush();
+            $this->addFlash('message', 'Thématique ajoutée avec succès');
+            return $this->redirectToRoute('user_thematiques_matieres');
         }
     
         if($choix == 'matiere') {
             $matiere->setLibelleMatiere($Matier);
             $em->persist($matiere);
             $em->flush();
+            $this->addFlash('message', 'Matière ajoutée avec succès');
+            return $this->redirectToRoute('user_thematiques_matieres');
         }
-        $message="Bien ajoutee ";
-        return $this->render('/user/ajouterCategorie.html.twig',array('msg'=>$message));
+        
+        
+        return $this->render('/user/ajouterCategorie.html.twig');
     }
     /* Liste des evaluations */
     public function evaluations_list(UserInterface $user)
@@ -128,6 +253,7 @@ class UserController extends AbstractController
         $em->remove($evaluation); 
         $em->flush();
         //add flash here
+        $this->addFlash('message', 'Evaluation supprimée avec succès');
         return $this->redirectToRoute('user_evaluations');
     }
 
@@ -135,7 +261,7 @@ class UserController extends AbstractController
     public function afficher_evaluation($id) {
         $evaluation = new Evaluation;
         $evaluation = $this->getDoctrine()->getRepository(Evaluation::class)->find($id);
-        return $this->render('/admin/afficherEvaluation.html.twig', array (
+        return $this->render('/user/afficherEvaluation.html.twig', array (
             'evaluation' => $evaluation
         ));
     }

@@ -1,5 +1,5 @@
 {% extends 'layouts/adminLayout.html.twig' %}
-
+{% block title %}Catégories{% endblock %}
 {% block body %}
     <div>
         <h2 class="titre">Thematiques et Matières</h2>
@@ -37,7 +37,7 @@
                     <a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_thematique',{'id':Thematique.id}) }}">Modifier</a>
                 </td>
                 <td>                    
-                    <a id="button_generer" class="button_admin" href="{{ path('admin_thematique_Supprimer',{'id':Thematique.id}) }}" onclick="return confirm('attention cette thematique va être supprimer !')">Supprimer</a>
+                    <a id="button_supprimer" class="button_admin" href="{{ path('admin_thematique_Supprimer',{'id':Thematique.id}) }}" onclick="return confirm('attention cette thematique va être supprimer !')">Supprimer</a>
                 </td>     
              {% endfor %}  
             </tr>              
@@ -71,7 +71,7 @@
                     <a id="button_modifier" class="button_admin" href="{{ path('admin_modifier_matiere',{'id':Matiere.id}) }}">Modifier</a>
                 </td>
                 <td>                    
-                    <a id="button_generer" class="button_admin" href="{{ path('admin_matiere_Supprimer',{'id':Matiere.id}) }}" onclick="return confirm('attention')">Supprimer</a>
+                    <a id="button_supprimer" class="button_admin" href="{{ path('admin_matiere_Supprimer',{'id':Matiere.id}) }}" onclick="return confirm('attention')">Supprimer</a>
                 </td>   
              {% endfor %}  
             </tr>              

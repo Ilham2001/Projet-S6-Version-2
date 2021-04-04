@@ -1,11 +1,11 @@
 {% extends 'layouts/userLayout.html.twig' %}
-
+{% block title %}Questions{% endblock %}
 {% block body %}
     <div>
         <h2 class="titre">Questions</h2>
         
         <div>
-            <div class="zone_filtre">
+            <center><div class="zone_filtre">
                 <form method="POST" action="{{path('user_questions')}}">
                     <ul>
                         <li>
@@ -43,7 +43,7 @@
                         </li>
                     </ul>
                 </form>
-            </div>
+            </div></center>
         </div>
 
         <a href="{{ path('user_ajouter_questions') }}" id="ajouter_question">+ Nouvelle question</a>
@@ -53,13 +53,19 @@
             <tr>
                 <th>Question</th>
                 <th>Propositions</th>
+                <th>Réponses</th>
             </tr>
             {% for question in questions %}
             <tr>
                 <th>{{ question.contenuQuestion }}</th>
                 <th>
                     {% for proposition in question.propositionsQuestion %}
-                        {{ proposition }}
+                        <div id="proposition"><i id="propo_icon" class="fas fa-chevron-circle-right"></i>{{ proposition }}</div>
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for reponse in question.reponsesQuestion %}
+                        <div id="proposition"><i id="propo_icon" class="fas fa-chevron-circle-right"></i>{{ reponse }}</div>
                     {% endfor %}
                 </th>
                 
