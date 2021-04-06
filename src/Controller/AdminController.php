@@ -9,6 +9,8 @@ use App\Entity\Matiere;
 use App\Entity\Thematique;
 use App\Entity\TypeQuestion;
 use App\Form\UserFormType;
+use App\Form\MatiereType;
+use App\Form\ThematiqueType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -501,10 +503,8 @@ class AdminController extends AbstractController
     
             if ($form_matiere->isSubmitted() && $form_matiere->isValid()) {
                 
-    
                 $em=$this->getDoctrine()->getManager();
                 $em->flush();
-                // perform some action...
                 $this->addFlash('message', 'Matière a été bien modifiée');
                 return $this->redirectToRoute('admin_thematiques_matieres');
             }
