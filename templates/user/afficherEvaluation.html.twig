@@ -20,7 +20,8 @@
                     <th colspan="2"><center>Aucun résultat</center></th>
                 </tr>
                 {% endfor %}
-                <a href="{{ path('user_generer_fichier', {'id' : evaluation.id }) }}"  id="button_generer" class="button_admin">Télécharger</a>
+                
         </table>
+        <a href="{{ path('admin_generer_fichier', {'id' : evaluation.id }) }}"  id="button_generer" class="button_admin generer_eval">Télécharger</a>
     </div>
 {% endblock %}

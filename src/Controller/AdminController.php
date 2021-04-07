@@ -574,7 +574,7 @@ class AdminController extends AbstractController
         //add flash here
         $this->addFlash('message', 'Evaluation supprimée avec succès');
 
-        return $this->redirectToRoute('user_evaluations');
+        return $this->redirectToRoute('admin_evaluations');
     }
     /* Afficher évaluation */
     public function afficher_evaluation($id) {

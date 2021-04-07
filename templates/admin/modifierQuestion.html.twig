@@ -63,11 +63,11 @@
                                     {% set value =  0 %}
                                         {% for proposition in question.propositionsQuestion %}
                                             {% if proposition in question.reponsesQuestion %}
-                                                <input "input_ajout" type="checkbox" id="{{ value }}" name="ChoixMultiple[]" value="{{ value }}" checked/>
-                                                <input "input_ajout" for="0" type="text" name="choixx{{ value }}" value="{{ proposition }}"/><br>
+                                                <input class="input_ajout" type="checkbox" id="{{ value }}" name="ChoixMultiple[]" value="{{ value }}" checked/>
+                                                <input class="input_ajout" for="0" type="text" name="choixx{{ value }}" value="{{ proposition }}"/><br>
                                             {% elseif proposition not in question.reponsesQuestion %}
-                                                <input "input_ajout" type="checkbox" id="{{ value }}" name="ChoixMultiple[]" value="{{ value }}"/>
-                                                <input "input_ajout" for="0" type="text" name="choixx{{ value }}" value="{{ proposition }}"/><br>
+                                                <input class="input_ajout" type="checkbox" id="{{ value }}" name="ChoixMultiple[]" value="{{ value }}"/>
+                                                <input class="input_ajout" for="0" type="text" name="choixx{{ value }}" value="{{ proposition }}"/><br>
                                             {% endif %}
                                             {% set value = value + 1 %}
                                         {% endfor %}
@@ -82,11 +82,11 @@
                                  {% set value =  1 %}
                                         {% for proposition in question.propositionsQuestion %}
                                             {% if proposition in question.reponsesQuestion %}
-                                                <input "input_ajout" type="radio" id="{{ value }}" name="UNIQUE" value="{{ value }}" checked/>
-                                                <input "input_ajout" for="{{ proposition }}" type="text" name="choix{{ value }}" value="{{ proposition }}"/><br>
+                                                <input class="input_ajout" type="radio" id="{{ value }}" name="UNIQUE" value="{{ value }}" checked/>
+                                                <input class="input_ajout" for="{{ proposition }}" type="text" name="choix{{ value }}" value="{{ proposition }}"/><br>
                                             {% elseif proposition not in question.reponsesQuestion %}
-                                                <input "input_ajout" type="radio" id="{{ value }}" name="UNIQUE" value="{{ value }}"/>
-                                                <input "input_ajout" for="{{ proposition }}" type="text" name="choix{{ value }}" value="{{ proposition }}"/><br>
+                                                <input class="input_ajout" type="radio" id="{{ value }}" name="UNIQUE" value="{{ value }}"/>
+                                                <input class="input_ajout" for="{{ proposition }}" type="text" name="choix{{ value }}" value="{{ proposition }}"/><br>
                                             {% endif %}
                                             {% set value = value + 1 %}
                                         {% endfor %}
